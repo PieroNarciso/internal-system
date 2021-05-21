@@ -1,0 +1,33 @@
+version: '3'
+
+
+services:
+  api:
+    image: system-api-dev
+    container_name: system-api-dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: always
+    ports:
+      - "${API_PORT}:8080"
+    volumes:
+      - ./src:/usr/src/app/src
+    depends_on:
+      - db
+    environment:
+      DB_URI: postgresql://postgres:postgres@db-system-dev:5432/dev
+      NODE_ENV: development
+      SECRET_KEY: ${SECRET_KEY}
+      CORS_ORIGIN_WHITELIST: ${CORS_ORIGIN_WHITELIST}
+
+  db:
+    container_name: db-system-dev
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dev
+    volumes:
+      - ./dbdata:/data/db
