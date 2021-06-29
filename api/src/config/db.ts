@@ -6,6 +6,6 @@ import { DB_URI } from '@/config/env';
 export default createConnection({
   type: 'postgres',
   url: DB_URI,
-  entities: [],
+  entities: ['../api/models/*.ts'],
   synchronize: true,
 });

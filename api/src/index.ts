@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 /** DB Connection */
 db
-  .then((_) => console.log('DB Connected'))
+  .then(() => console.log('DB Connected'))
   .catch((err) => console.error(err));
 
 /** Global Routing */
