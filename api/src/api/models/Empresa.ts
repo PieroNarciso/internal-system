@@ -1,4 +1,6 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+import { OrdenServicio } from '@/api/models/OrdenServicio';
 
 
 @Entity()
@@ -12,5 +14,8 @@ export class Empresa extends BaseEntity {
 
   @Column()
   ruc: string;
+
+  @OneToMany(() => OrdenServicio, orden => orden.empresa)
+  ordenes: OrdenServicio[];
 
 }
