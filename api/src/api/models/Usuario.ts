@@ -1,22 +1,34 @@
-import { Column, PrimaryGeneratedColumn, Entity, BaseEntity } from 'typeorm';
+import {IsEmail, IsNotEmpty} from 'class-validator';
+import { Column, PrimaryGeneratedColumn, Entity, BaseEntity, Generated } from 'typeorm';
+import { Rol } from '@/api/types';
 
 
-@Entity()
-export class User extends BaseEntity {
+@Entity('usuarios')
+export class Usuario extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
+  @Generated('uuid')
+  uuid: string;
+
+  @Column({ nullable: false, unique: true })
+  @IsNotEmpty()
   username: string;
 
-  @Column()
+  @Column({ nullable: false, unique: true })
+  @IsEmail()
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: Rol,
+    default: Rol.USUARIO,
+  })
   rol: string;
 
 }
