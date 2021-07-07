@@ -54,6 +54,7 @@ export const userController = {
         const isValid = await bcrypt.compare(req.body.password, user.password);
         if (isValid) {
           req.session.userID = user.id;
+          console.log(req.sessionID);
           return res.status(200).send({ ...user, password: undefined });
         } else {
           return res.status(404).send({ msg: 'Usuario o contraseña incorrecta' });

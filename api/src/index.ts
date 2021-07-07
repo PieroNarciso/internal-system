@@ -1,6 +1,7 @@
 import express from 'express';
-import session from 'express-session';
+import session, { MemoryStore } from 'express-session';
 import cors from 'cors';
+import 'reflect-metadata';
 
 import { globalRouter } from '@/api/routes';
 import { dbConnection } from '@/config/db';
@@ -14,11 +15,9 @@ app.use(cors({
   exposedHeaders: ['Set-Cookie'],
 }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 app.use(session({
   name: SESSION_NAME,
+  store: new MemoryStore(),
   secret: SESSION_SECRET,
   saveUninitialized: false,
   resave: false,
@@ -26,6 +25,10 @@ app.use(session({
     sameSite: false,
   }
 }));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 
 /** Global Routing */
