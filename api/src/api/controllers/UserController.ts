@@ -7,9 +7,13 @@ import { SALT_ROUNDS } from '@/config/env';
 
 export const userController = {
 
+  /**
+   * Registro de usuario
+   * - Body: { username: string, email: string, password: string, rol?: Role }
+   */
   createUser: async (req: Request, res: Response) => {
-    if (!req.body.password) {
-      return res.status(400).send({ msg: 'Se necesita el password' });
+    if (!req.body.password || !req.body.username || !req.body.email) {
+      return res.status(400).send({ msg: 'El usuario y contraseña son requeridos' });
     }
     try {
       req.body.password = await bcrypt.hash(req.body.password, SALT_ROUNDS);
@@ -49,7 +53,8 @@ export const userController = {
       if (user) {
         const isValid = await bcrypt.compare(req.body.password, user.password);
         if (isValid) {
-          // Login
+          req.session.userID = user.id;
+          console.log(req.sessionID);
           return res.status(200).send({ ...user, password: undefined });
         } else {
           return res.status(404).send({ msg: 'Usuario o contraseña incorrecta' });
@@ -60,6 +65,5 @@ export const userController = {
       console.log(err);
       return res.status(400).send(err);
     }
-  }
-
+  },
 };
