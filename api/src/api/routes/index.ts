@@ -4,6 +4,7 @@
 import { Router, Express } from 'express';
 
 import { userRouter } from './UserRouter';
+import { empresaRouter } from './EmpresaRouter';
 
 const router = Router();
 
@@ -23,4 +24,5 @@ export const globalRouter = (app: Express): void => {
    * Import Other Routes
    */
   app.use('/users', userRouter);
+  app.use('/empresas', empresaRouter);
 };
