@@ -1,14 +1,13 @@
 import {Router} from 'express';
 
-import { userController } from '@/api/controllers';
+import { createUser, getUserByUuid, loginUser } from '@/api/controllers';
 
 
 const userRouter = Router();
 
-userRouter.post('/', userController.createUser);
-userRouter.get('/:uuid', userController.getUserByUuid);
-userRouter.post('/login', userController.loginUser);
+userRouter.post('/', createUser);
+userRouter.get('/:uuid', getUserByUuid);
+userRouter.post('/login', loginUser);
 
 
 export { userRouter };
-
