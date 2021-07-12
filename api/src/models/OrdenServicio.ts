@@ -13,7 +13,7 @@ export class OrdenServicio extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   @IsNotEmpty()
   numOrden: string;
 
