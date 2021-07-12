@@ -5,8 +5,12 @@ import { getRepository } from 'typeorm';
 
 
 export const createOrdenServicio = async (req: Request, res: Response) => {
+  const { numOrden, empresaId } = req.body;
   try {
-    const [orden] = getRepository(OrdenServicio).create([{ ...req.body }]);
+    const [orden] = getRepository(OrdenServicio).create([{
+      numOrden,
+      empresa: { id: empresaId },
+    }]);
     await orden.save();
     return res.status(201).send(orden);
   } catch(err) {

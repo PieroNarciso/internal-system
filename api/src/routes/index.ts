@@ -5,6 +5,7 @@ import { Router, Express } from 'express';
 
 import { userRouter } from './UserRouter';
 import { empresaRouter } from './EmpresaRouter';
+import { ordenServicioRouter } from './OrdenServicioRouter';
 
 const router = Router();
 
@@ -25,4 +26,5 @@ export const globalRouter = (app: Express): void => {
    */
   app.use('/users', userRouter);
   app.use('/empresas', empresaRouter);
+  app.use('/ordenes', ordenServicioRouter);
 };
