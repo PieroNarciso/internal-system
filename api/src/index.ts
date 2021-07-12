@@ -3,7 +3,7 @@ import session, { MemoryStore } from 'express-session';
 import cors from 'cors';
 import 'reflect-metadata';
 
-import { globalRouter } from '@/api/routes';
+import { globalRouter } from '@/routes';
 import { dbConnection } from '@/config/db';
 import { API_PORT, CORS_ORIGIN_WHITELIST, SESSION_NAME, SESSION_SECRET } from '@/config/env';
 

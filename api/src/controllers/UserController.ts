@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
 
-import { Usuario } from '@/api/models/Usuario';
+import { Usuario } from '@/models/Usuario';
 import { SALT_ROUNDS } from '@/config/env';
 
 /**

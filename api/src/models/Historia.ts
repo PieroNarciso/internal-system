@@ -1,7 +1,7 @@
 import { Column, PrimaryGeneratedColumn, Entity, Generated, CreateDateColumn, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
 
-import { Tipo } from '@/api/models/Tipo';
-import { OrdenServicio } from '@/api/models/OrdenServicio';
+import { Tipo } from '@/models/Tipo';
+import { OrdenServicio } from '@/models/OrdenServicio';
 
 
 @Entity('historias')

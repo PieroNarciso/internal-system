@@ -1,5 +1,5 @@
 import { Column, PrimaryGeneratedColumn, Generated, Entity, ManyToOne } from 'typeorm';
-import { OrdenServicio } from '@/api/models/OrdenServicio';
+import { OrdenServicio } from '@/models/OrdenServicio';
 import {IsNotEmpty} from 'class-validator';
 
 

@@ -1,6 +1,6 @@
 import {Router} from 'express';
 
-import { createUser, getUserByUuid, loginUser } from '@/api/controllers';
+import { createUser, getUserByUuid, loginUser } from '@/controllers';
 
 
 const userRouter = Router();

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { OrdenServicio } from '@/api/models/OrdenServicio';
+import { OrdenServicio } from '@/models/OrdenServicio';
 import { getRepository } from 'typeorm';
 
 
@@ -12,7 +12,7 @@ export const createOrdenServicio = async (req: Request, res: Response) => {
   } catch(err) {
     return res.status(500).send(err);
   }
-}
+};
 
 export const getOrdenServicioById = async (req: Request, res: Response) => {
   try {
@@ -24,7 +24,7 @@ export const getOrdenServicioById = async (req: Request, res: Response) => {
   } catch(err) {
     return res.status(500).send(err);
   }
-}
+};
 
 /**
   * Solo se puede hacer update a `estado` y `numOrden`
@@ -44,4 +44,4 @@ export const updateOrdenServicioById = async (req: Request, res: Response) => {
   } catch(err) {
     return res.status(500).send(err);
   }
-}
+};

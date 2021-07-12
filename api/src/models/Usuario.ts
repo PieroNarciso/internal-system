@@ -1,6 +1,6 @@
 import {IsEmail, IsNotEmpty} from 'class-validator';
 import { Column, PrimaryGeneratedColumn, Entity, BaseEntity, Generated } from 'typeorm';
-import { Rol } from '@/api/types';
+import { Rol } from '@/types';
 
 
 @Entity('usuarios')

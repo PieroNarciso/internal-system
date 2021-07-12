@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-import { OrdenServicio } from '@/api/models/OrdenServicio';
+import { OrdenServicio } from '@/models/OrdenServicio';
 
 
 @Entity()

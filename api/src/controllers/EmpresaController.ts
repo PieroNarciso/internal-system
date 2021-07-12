@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { Empresa } from '@/api/models/Empresa';
+import { Empresa } from '@/models/Empresa';
 import { FindOneOptions, getRepository } from 'typeorm';
 
 export const createEmpresa = async (req: Request, res: Response) => {

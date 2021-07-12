@@ -1,10 +1,10 @@
 import { ManyToOne, Column, PrimaryGeneratedColumn, Entity, BaseEntity, OneToMany } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
 
-import { Empresa } from '@/api/models/Empresa';
-import { Historia } from '@/api/models/Historia';
-import { Item } from '@/api/models/Item';
-import { Estado } from '@/api/types';
+import { Empresa } from '@/models/Empresa';
+import { Historia } from '@/models/Historia';
+import { Item } from '@/models/Item';
+import { Estado } from '@/types';
 
 
 @Entity()
