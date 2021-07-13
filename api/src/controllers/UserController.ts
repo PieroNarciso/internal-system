@@ -58,7 +58,7 @@ export const loginUser = async (req: Request, res: Response) => {
     if (user) {
       const isValid = await bcrypt.compare(req.body.password, user.password);
       if (isValid) {
-        req.session.userID = user.id;
+        req.session.userUuid = user.uuid;
         return res.status(200).send({ ...user, password: undefined });
       } else {
         return res.status(404).send({ msg: 'Usuario o contraseña incorrecta' });
