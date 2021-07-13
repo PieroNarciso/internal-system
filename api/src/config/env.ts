@@ -6,4 +6,5 @@ export const {
   SALT_ROUNDS = 10,
   SESSION_SECRET = 'secret',
   SESSION_NAME = 'ssiud',
+  REDIS_URL,
 } = process.env;
