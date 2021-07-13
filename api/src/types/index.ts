@@ -4,6 +4,11 @@ export enum Estado {
   COMPLETADO = 'completado',
 }
 
+export enum TipoNombre {
+  DESPACHO = 'despacho',
+  PRODUCCION = 'produccion',
+}
+
 export enum Rol {
   ADMIN = 'admin',
   USUARIO = 'usuario',

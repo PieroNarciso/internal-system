@@ -1,5 +1,6 @@
-import {IsNotEmpty} from 'class-validator';
 import { Column, PrimaryGeneratedColumn, Entity, Generated } from 'typeorm';
+
+import { TipoNombre } from '@/types';
 
 
 @Entity('tipos')
@@ -12,8 +13,11 @@ export class Tipo {
   @Generated('uuid')
   uuid: string;
 
-  @Column()
-  @IsNotEmpty()
+  @Column({
+    type: 'enum',
+    enum: TipoNombre,
+    default: TipoNombre.PRODUCCION,
+    unique: true,
+  })
   nombre: string;
-
 }
