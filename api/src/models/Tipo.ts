@@ -1,10 +1,10 @@
-import { Column, PrimaryGeneratedColumn, Entity, Generated } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity, Generated, BaseEntity } from 'typeorm';
 
 import { TipoNombre } from '@/types';
 
 
 @Entity('tipos')
-export class Tipo {
+export class Tipo extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
