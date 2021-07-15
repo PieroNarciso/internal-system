@@ -28,6 +28,9 @@ export const getTipos = async (_req: Request, res: Response) => {
 
 
 export const getTipoById = async (req: Request, res: Response) => {
+  const { tipoId } = req.params;
+  if (!tipoId)
+    return res.status(400).send('Not Found');
   try {
     const tipo = await getRepository(Tipo).findOne(req.params.tipoId);
     if (tipo) {
