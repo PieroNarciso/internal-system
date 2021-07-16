@@ -1,10 +1,11 @@
-import { Column, PrimaryGeneratedColumn, Generated, Entity, ManyToOne } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Generated, Entity, ManyToOne, OneToMany, BaseEntity } from 'typeorm';
 import { OrdenServicio } from '@/models/OrdenServicio';
 import {IsNotEmpty} from 'class-validator';
+import { Historia } from '@/models/Historia';
 
 
 @Entity('items')
-export class Item {
+export class Item extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -23,6 +24,9 @@ export class Item {
 
   @Column({ type: 'float', default: 0.00 })
   totalDespachado: number;
+
+  @OneToMany(() => Historia, historia => historia.item)
+  historias: Historia[];
 
   @ManyToOne(() => OrdenServicio, orden => orden.items)
   orden: OrdenServicio;
