@@ -1,4 +1,4 @@
-import { Column, PrimaryGeneratedColumn, Entity, Generated, CreateDateColumn, ManyToOne, OneToOne, BaseEntity } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity, Generated, CreateDateColumn, ManyToOne, BaseEntity } from 'typeorm';
 
 import { Tipo } from '@/models/Tipo';
 import { OrdenServicio } from '@/models/OrdenServicio';
@@ -27,7 +27,7 @@ export class Historia extends BaseEntity {
   @ManyToOne(() => Item, item => item.historias)
   item: Item;
 
-  @OneToOne(() => Tipo)
+  @ManyToOne(() => Tipo, tipo => tipo.historias)
   tipo: Tipo;
 
 }

@@ -8,7 +8,7 @@ export const createHistoria = async (req: Request, res: Response) => {
   const { peso, ordenId, itemId, tipoId } = req.body;
   try {
     const historia = getRepository(Historia).create({
-      peso,
+      peso: parseFloat(peso),
       orden: { id: ordenId },
       item: { id: itemId },
       tipo: { id: tipoId },
@@ -16,6 +16,7 @@ export const createHistoria = async (req: Request, res: Response) => {
     await historia.save();
     return res.status(201).send(historia);
   } catch (err) {
+    console.log(err);
     return res.status(500).send(err);
   }
 };

@@ -21,13 +21,8 @@ export const createItem = async (req: Request, res: Response) => {
 };
 
 export const getItemById = async (req: Request, res: Response) => {
-  const { itemId } = req.body;
-  if (!itemId)
-    return res.status(400).send('No Encontrado');
   try {
-    const item = await getRepository(Item).findOne({
-      id: itemId,
-    });
+    const item = await getRepository(Item).findOne(req.params.itemId);
     if (item)
       return res.status(200).send(item);
     return res.status(404).send('No Encontrado');
@@ -37,7 +32,7 @@ export const getItemById = async (req: Request, res: Response) => {
 };
 
 export const getItemsByOrdenId = async (req: Request, res: Response) => {
-  const { ordenId } = req.body;
+  const { ordenId } = req.params;
   if (!ordenId)
     return res.status(400).send('No encontrado');
   try {
