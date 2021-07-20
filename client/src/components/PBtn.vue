@@ -1,5 +1,5 @@
 <template>
-  <button class="flex items-center px-3 py-2 bg-gray-300 rounded text-white" v-bind="$attrs" type="button">
+  <button class="flex items-center px-3 py-2" v-bind="$attrs" type="button">
     <slot />
     <template v-if="icon">
       <p-icon class="ml-2" :name="icon"></p-icon> 
@@ -15,11 +15,11 @@ export default defineComponent({
   props: {
     icon: {
       type: String,
-    }
+    },
   },
   components: {
     PIcon,
-  }
+  },
 })
 </script>
 

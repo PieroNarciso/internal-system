@@ -1,8 +1,7 @@
 <template>
-  <button v-bind="$attrs">
-    <slot>
-  </button> 
+  <div>Hola</div> 
 </template>
+
 
 <script lang="ts">
 import { defineComponent } from 'vue'
