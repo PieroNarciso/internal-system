@@ -1,13 +1,16 @@
 <template>
-  <q-toolbar>
-    <q-btn icon="menu"/>
-    <q-toolbar-title>Texaf</q-toolbar-title>
-  </q-toolbar>
+  <button v-bind="$attrs">
+    <slot>
+  </button> 
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+  setup() {
+    
+  },
 })
 </script>
+
