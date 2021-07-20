@@ -1,6 +1,6 @@
 import {IsEmail, IsNotEmpty} from 'class-validator';
 import { Column, PrimaryGeneratedColumn, Entity, BaseEntity, Generated } from 'typeorm';
-import { Rol } from '@/types';
+import { Role } from '@/types';
 
 
 @Entity('usuarios')
@@ -26,9 +26,9 @@ export class Usuario extends BaseEntity {
 
   @Column({
     type: 'enum',
-    enum: Rol,
-    default: Rol.USUARIO,
+    enum: Role,
+    default: Role.USUARIO,
   })
-  rol: string;
+  role: string;
 
 }

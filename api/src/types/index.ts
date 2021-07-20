@@ -9,7 +9,7 @@ export enum TipoNombre {
   PRODUCCION = 'produccion',
 }
 
-export enum Rol {
+export enum Role {
   ADMIN = 'admin',
   USUARIO = 'usuario',
 }
