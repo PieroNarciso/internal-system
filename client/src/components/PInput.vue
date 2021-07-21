@@ -4,7 +4,7 @@
     type="text"
     :value="modelValue"
     @input="updateModelValue"
-    class="placeholder-gray-400"
+    class="placeholder-gray-400 ring-1 focus:ring-1 ring-gray-500 border-gray-500 focus:ring-indigo-500"
   />
 </template>
 
