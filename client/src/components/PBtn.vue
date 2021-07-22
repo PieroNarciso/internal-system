@@ -1,5 +1,5 @@
 <template>
-  <button class="flex items-center focus:outline-none px-3 py-2" v-bind="$attrs" type="button">
+  <button v-bind="$attrs" class="flex items-center focus:outline-none px-3 py-2" type="button">
     <slot />
     <template v-if="icon">
       <p-icon class="ml-2" :name="icon"></p-icon> 
@@ -15,6 +15,7 @@ export default defineComponent({
   props: {
     icon: {
       type: String,
+      required: false,
     },
     loading: {
       type: Boolean,
