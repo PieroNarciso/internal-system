@@ -12,7 +12,7 @@
     <div @click="toggleDrawer" class="h-full bg-black opacity-30 right-0 flex-grow"></div>
   </div>
 
-  <div class="container">
+  <div class="container px-3 mx-auto pt-3">
     <router-view></router-view>
   </div>
 </template>
