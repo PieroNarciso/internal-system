@@ -3,7 +3,18 @@
     <div class="flex justify-end">
       <p-btn class="bg-indigo-500 text-white rounded" icon="plus">Nuevo</p-btn>
     </div>
-    <div class="mt-5"></div>
+    <div class="mt-5">
+      <template v-if="ordenes.length > 0">
+        <card-orden
+          v-for="orden in ordenes"
+          :key="orden.id"
+          :orden="orden"
+        ></card-orden>
+      </template>
+      <div v-else class="text-center text-gray-700">
+        <span>No hay Ordenes registradas</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -22,11 +33,6 @@ export default defineComponent({
   },
   setup() {
     const ordenes = ref<OrdenServicio[]>([
-      {
-        id: 1,
-        numOrden: '21-00231',
-        estado: Estado.ACTIVO
-      }
     ]);
 
     return {
