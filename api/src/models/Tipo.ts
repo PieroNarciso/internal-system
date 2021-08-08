@@ -1,6 +1,7 @@
-import { Column, PrimaryGeneratedColumn, Entity, Generated, BaseEntity } from 'typeorm';
+import { Column, OneToMany, PrimaryGeneratedColumn, Entity, Generated, BaseEntity } from 'typeorm';
 
 import { TipoNombre } from '@/types';
+import { Historia } from './Historia';
 
 
 @Entity('tipos')
@@ -20,4 +21,7 @@ export class Tipo extends BaseEntity {
     unique: true,
   })
   nombre: string;
+
+  @OneToMany(() => Historia, historia => historia.tipo)
+  historias: Historia[];
 }
