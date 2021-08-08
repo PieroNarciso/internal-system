@@ -19,6 +19,15 @@ export const createOrdenServicio = async (req: Request, res: Response) => {
   }
 };
 
+export const getOrdenes = async (_req: Request, res: Response) => {
+  try {
+    const ordenes = await getRepository(OrdenServicio).find();
+    return res.send(ordenes);
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+};
+
 export const getOrdenServicioById = async (req: Request, res: Response) => {
   const returnRelations = req.query.relations === 'true';
   const options: FindOneOptions<OrdenServicio> = returnRelations
