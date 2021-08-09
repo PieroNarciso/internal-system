@@ -48,7 +48,6 @@ app.use(
   })
 );
 
-console.log(swaggerDocument);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // /** Global Routing */
