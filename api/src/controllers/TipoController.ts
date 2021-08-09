@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getManager, getRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 
 import { Tipo } from '@/models/Tipo';
 
@@ -9,7 +9,7 @@ export const createTipo = async (req: Request, res: Response) => {
   try {
     const tipo = new Tipo();
     tipo.nombre = nombre;
-    await getManager().save(tipo);
+    await tipo.save();
     return res.status(201).send(tipo);
   } catch (err) {
     return res.status(500).send(err);

@@ -1,11 +1,11 @@
-import { Column, PrimaryGeneratedColumn, Entity, Generated, OneToMany } from 'typeorm';
+import { Column, OneToMany, PrimaryGeneratedColumn, Entity, Generated, BaseEntity } from 'typeorm';
 
 import { TipoNombre } from '@/types';
 import { Historia } from './Historia';
 
 
 @Entity('tipos')
-export class Tipo {
+export class Tipo extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
