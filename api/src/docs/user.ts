@@ -1,15 +1,15 @@
 import { OpenAPIV3 } from 'openapi-types';
 
 export const userComponents: OpenAPIV3.ComponentsObject['schemas'] = {
-  Estado: {
+  EstadoOrdenServicio: {
     type: 'string',
-    enum: ['usuario', 'admin'],
+    enum: ['activo', 'inactivo', 'completado'],
   },
-  TipoNombre: {
+  HistoriaTipoNombre: {
     type: 'string',
     enum: ['despacho', 'produccion'],
   },
-  Role: {
+  UserRole: {
     type: 'string',
     enum: ['usuario', 'admin'],
   },
@@ -36,6 +36,9 @@ export const userComponents: OpenAPIV3.ComponentsObject['schemas'] = {
       password: {
         type: 'string',
       },
+      role: {
+        $ref: '#/components/schemas/UserRole'
+      }
     },
   },
   LoginUserResponse: {
@@ -65,14 +68,14 @@ export const userComponents: OpenAPIV3.ComponentsObject['schemas'] = {
         type: 'string',
       },
       role: {
-        $ref: '#/components/schemas/Role',
+        $ref: '#/components/schemas/UserRole',
       },
     },
   },
 };
 
 export const userPaths: OpenAPIV3.PathsObject = {
-  '/user/login': {
+  '/users/login': {
     post: {
       summary: 'Login User',
       tags: ['User'],
