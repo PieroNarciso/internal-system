@@ -16,6 +16,8 @@ const tags: OpenAPIV3.TagObject[] = [
   { name: 'User' },
   { name: 'Empresa' },
   { name: 'Orden' },
+  { name: 'Item' },
+  { name: 'Historia' }
 ];
 
 const paths: OpenAPIV3.PathsObject= {

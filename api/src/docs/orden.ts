@@ -106,9 +106,6 @@ export const ordenComponents: OpenAPIV3.ComponentsObject['schemas'] = {
   HistoriaCreateBody: {
     type: 'object',
     properties: {
-      itemId: {
-        type: 'number'
-      },
       tipoId: {
         type: 'number'
       },
@@ -241,6 +238,44 @@ export const ordenPaths: OpenAPIV3.PathsObject = {
         },
         '404': {
           description: 'Not Found'
+        },
+        '500': {
+          description: 'Server Error'
+        }
+      }
+    }
+  },
+  '/ordenes/{ordenId}/items/{itemId}': {
+    post: {
+      summary: 'Add Historia to Item',
+      tags: ['Orden', 'Item', 'Historia'],
+      parameters: [
+        { name: 'ordenId', in: 'path', required: true },
+        { name: 'itemId', in: 'path', required: true }
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/HistoriaCreateBody'
+            }
+          }
+        }
+      },
+      responses: {
+        '201': {
+          description: 'Added successfully',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/Historia',
+              }
+            }
+          }
+        },
+        '404': {
+          description: 'Not Found',
         },
         '500': {
           description: 'Server Error'
