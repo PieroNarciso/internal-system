@@ -13,9 +13,6 @@ export const empresaComponents: OpenAPIV3.ComponentsObject['schemas'] = {
       ruc: {
         type: 'string',
       },
-      ordenes: {
-        $ref: '#/components/schemas/Orden',
-      }
     }
   },
   EmpresaCreate: {
