@@ -8,6 +8,9 @@ export const ordenComponents: OpenAPIV3.ComponentsObject['schemas'] = {
       id: {
         type: 'number'
       },
+      empresa: {
+        $ref: '#/components/schemas/Empresa',
+      },
       numOrden: {
         type: 'string'
       },
@@ -103,6 +106,17 @@ export const ordenComponents: OpenAPIV3.ComponentsObject['schemas'] = {
       },
     }
   },
+  ItemEditBody: {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+      },
+      peso: {
+        type: 'number'
+      }
+    }
+  },
   HistoriaCreateBody: {
     type: 'object',
     properties: {
@@ -114,9 +128,29 @@ export const ordenComponents: OpenAPIV3.ComponentsObject['schemas'] = {
       }
     }
   },
+  OrdenEditBody: {
+    type: 'object',
+    properties: {
+      empresaId: {
+        type: 'number',
+      },
+      numOrden: {
+        type: 'string',
+      },
+      items: {
+        type: 'array',
+        items: {
+          $ref: '#/components/schemas/ItemEditBody',
+        },
+      }
+    },
+  },
   OrdenCreateBody: {
     type: 'object',
     properties: {
+      empresaId: {
+        type: 'number',
+      },
       numOrden: {
         type: 'string',
       },
@@ -206,6 +240,50 @@ export const ordenPaths: OpenAPIV3.PathsObject = {
           description: 'Not Found',
         }
       }
+    },
+    put: {
+      summary: 'Edit Orden',
+      tags: ['Orden'],
+      parameters: [
+        { name: 'ordenId', required: true, in: 'path' },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                empresaId: {
+                  type: 'number',
+                },
+                numOrden: {
+                  type: 'string',
+                },
+                estado: {
+                  $ref: '#/components/schemas/EstadoOrdenServicio',
+                },
+                items: {
+                  type: 'array',
+                  items: {
+                    allOf: [
+                      {
+                        type: 'object',
+                        properties: {
+                          id: {
+                            type: 'number'
+                          }
+                        },
+                      },
+                      { $ref: '#/components/schemas/ItemEditBody' },
+                    ],
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   '/ordenes/{ordenId}/items': {
@@ -246,6 +324,24 @@ export const ordenPaths: OpenAPIV3.PathsObject = {
     }
   },
   '/ordenes/{ordenId}/items/{itemId}': {
+    put: {
+      summary: 'Edit Item attributes',
+      tags: ['Item'],
+      parameters: [
+        { name: 'ordenId', in: 'path', required: true },
+        { name: 'itemId', in: 'path', required: true },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/ItemEditBody',
+            },
+          }
+        }
+      }
+    },
     post: {
       summary: 'Add Historia to Item',
       tags: ['Orden', 'Item', 'Historia'],
@@ -281,6 +377,6 @@ export const ordenPaths: OpenAPIV3.PathsObject = {
           description: 'Server Error'
         }
       }
-    }
+    },
   }
 };
