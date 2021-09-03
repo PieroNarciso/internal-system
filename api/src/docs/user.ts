@@ -36,9 +36,6 @@ export const userComponents: OpenAPIV3.ComponentsObject['schemas'] = {
       password: {
         type: 'string',
       },
-      role: {
-        $ref: '#/components/schemas/UserRole'
-      }
     },
   },
   LoginUserResponse: {
@@ -49,6 +46,9 @@ export const userComponents: OpenAPIV3.ComponentsObject['schemas'] = {
       },
       username: {
         type: 'string',
+      },
+      role: {
+        $ref: '#/components/schemas/UserRole',
       },
     },
   },
