@@ -1,74 +1,58 @@
-import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
-import bcrypt from 'bcrypt';
+import { NextFunction, Request, Response } from 'express';
 
-import { Usuario } from '@/models/Usuario';
-import { SALT_ROUNDS } from '@/config/env';
 import { Role } from '@/types';
+import UserService from '@/services/UserService';
 
-/**
- * Registro de usuario
- * - Body: { username: string, email: string, password: string, rol?: Role }
- */
-export const createUser = async (req: Request, res: Response) => {
-  if (!req.body.password || !req.body.username || !req.body.email) {
-    return res
-      .status(400)
-      .send({ msg: 'El usuario y contraseña son requeridos' });
-  }
+export const createUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    req.body.password = await bcrypt.hash(req.body.password, SALT_ROUNDS);
-    const [user] = getRepository(Usuario).create([{ ...req.body }]);
-    await user.save();
-
+    if (!req.body.password || !req.body.username || !req.body.email) {
+      throw new Error('Missing attributes');
+    }
+    const user = await UserService.create({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+    });
     return res.status(201).send({ ...user, password: undefined });
   } catch (err) {
-    console.log(err);
-    return res.status(500).send(err);
+    return next(err);
   }
 };
 
-/**
- * Obtiene el usuario por el `uuid`, recibe como parametro el `uuid` en
- * `Request.params`
- */
-export const getUserByUuid = async (req: Request, res: Response) => {
+export const getUserByUuid = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const user = await getRepository(Usuario).findOne({
-      uuid: req.params.uuid,
-    });
-    if (user) {
-      return res.status(200).send(user);
-    }
-    return res.status(404).send({ msg: 'El usuario no existe' });
+    const user = await UserService.findByUuid(req.params.uuid);
+    return res.status(200).send(user);
   } catch (err) {
-    console.log(err);
-    return res.status(500).send(err);
+    return next(err);
   }
 };
 
-/**
- * Login user with body => { username: string, password: string }
- */
-export const loginUser = async (req: Request, res: Response) => {
+export const loginUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const user = await getRepository(Usuario).findOne(
-      { username: req.body.username },
-      { select: ['uuid', 'username', 'password'] }
+    if (!req.body.username || !req.body.password) {
+      throw new Error('No credentials provided');
+    }
+    const user = await UserService.findByCredentials(
+      req.body.username,
+      req.body.password
     );
-    if (user) {
-      const isValid = await bcrypt.compare(req.body.password, user.password);
-      if (isValid) {
-        req.session.userUuid = user.uuid;
-        req.session.userRole = user.role as Role;
-        return res.status(200).send({ ...user, password: undefined });
-      } else {
-        return res.status(404).send({ msg: 'Usuario o contraseña incorrecta' });
-      }
-    }
-    return res.status(404).send({ msg: 'Usuario o contraseña incorrecta' });
+    req.session.userUuid = user.uuid;
+    req.session.userRole = user.role as Role;
+    return res.status(200).send({ ...user, password: undefined });
   } catch (err) {
-    console.log(err);
-    return res.status(400).send(err);
+    return next(err);
   }
 };

@@ -11,16 +11,17 @@ class UserService {
     email: string;
   }): Promise<Usuario> {
     if (!payload.username || !payload.password || !payload.email) {
-      throw Error('Missing attributes');
+      throw new Error('Missing attributes');
     }
     try {
       payload.password = await bcrypt.hash(payload.password, SALT_ROUNDS);
       const user = getRepository(Usuario).create({
         ...payload,
       });
+      await user.save();
       return user;
     } catch (err) {
-      throw Error(err);
+      throw new Error(err);
     }
   }
 
@@ -28,7 +29,7 @@ class UserService {
     username: string,
     includePassword = false
   ): Promise<Usuario> {
-    if (!username) throw Error('Not username');
+    if (!username) throw new Error('Not username');
     try {
       const select: (keyof Usuario)[] = ['uuid', 'username'];
       if (includePassword) select.push('password');
@@ -38,9 +39,9 @@ class UserService {
       );
       if (user) {
         return user;
-      } else throw Error('404');
+      } else throw new Error('404');
     } catch (err) {
-      throw Error(err);
+      throw new Error(err);
     }
   }
 
@@ -48,9 +49,9 @@ class UserService {
     try {
       const user = await getRepository(Usuario).findOne({ uuid });
       if (user) return user;
-      throw Error('404');
+      throw new Error('404');
     } catch (err) {
-      throw Error(err);
+      throw new Error(err);
     }
   }
 
@@ -60,12 +61,12 @@ class UserService {
   ): Promise<Usuario> {
     if (!username || !password) throw Error('No credentials provided');
     try {
-      const user = await this.findByUsername(password, true);
+      const user = await this.findByUsername(username, true);
       if (user && this.verifyPasswordValidity(password, user.password)) {
         return user;
-      } else throw Error('Incorrect Credential');
+      } else throw new Error('Incorrect Credential');
     } catch (err) {
-      throw Error(err);
+      throw new Error(err);
     }
   }
 
@@ -78,7 +79,7 @@ class UserService {
       if (isValid) return true;
       else return false;
     } catch (err) {
-      throw Error(err);
+      throw new Error(err);
     }
   }
 }
