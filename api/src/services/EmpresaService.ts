@@ -25,8 +25,7 @@ class EmpresaService {
     try {
       if (!id) throw new Error('Missing id');
       const empresa = await getRepository(Empresa).findOne({ id });
-      if (empresa)
-        return empresa;
+      if (empresa) return empresa;
       throw new Error('Not Found');
     } catch (err) {
       throw new Error(err);
