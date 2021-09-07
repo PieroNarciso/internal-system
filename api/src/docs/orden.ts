@@ -112,7 +112,7 @@ export const ordenComponents: OpenAPIV3.ComponentsObject['schemas'] = {
       name: {
         type: 'string',
       },
-      peso: {
+      totalDespachar: {
         type: 'number'
       }
     }
@@ -282,6 +282,11 @@ export const ordenPaths: OpenAPIV3.PathsObject = {
               }
             }
           }
+        }
+      },
+      responses: {
+        '200': {
+          description: 'Updated successfully',
         }
       }
     }
