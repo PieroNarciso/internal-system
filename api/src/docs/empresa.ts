@@ -46,11 +46,11 @@ export const empresaPaths: OpenAPIV3.PathsObject = {
       },
       responses: {
         201: {
-          description: 'User created',
+          description: 'Empresa Created',
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schema/Empresa'
+                $ref: '#/components/schemas/Empresa'
               }
             }
           }
@@ -61,7 +61,7 @@ export const empresaPaths: OpenAPIV3.PathsObject = {
       }
     }
   },
-  'empresas/{empresaId}': {
+  '/empresas/{empresaId}': {
     get: {
       summary: 'Get empresa by Id',
       tags: ['Empresa'],
@@ -80,7 +80,7 @@ export const empresaPaths: OpenAPIV3.PathsObject = {
           }
         },
         404: {
-          description: 'User not found',
+          description: 'Not Found',
         },
         500: {
           description: 'Server error'
