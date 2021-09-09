@@ -1,69 +1,107 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
-import { OrdenServicio } from '@/models/OrdenServicio';
-import { FindOneOptions, getRepository } from 'typeorm';
+import OrdenService from '@/services/OrdenService';
+import ItemService from '@/services/ItemService';
+import HistoryService from '@/services/HistoryService';
 
-export const createOrdenServicio = async (req: Request, res: Response) => {
-  const { numOrden, empresaId } = req.body;
+export const createOrdenServicio = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const [orden] = getRepository(OrdenServicio).create([
-      {
-        numOrden,
-        empresa: { id: empresaId },
-      },
-    ]);
-    await orden.save();
+    if (!req.body.empresaId || !req.body.numOrden)
+      throw new Error('Missing Attributes');
+    const orden = await OrdenService.create({
+      empresaId: req.body.empresaId,
+      numOrden: req.body.numOrden,
+      items: req.body.items,
+    });
     return res.status(201).send(orden);
   } catch (err) {
-    return res.status(500).send(err);
+    return next(err);
   }
 };
 
-export const getOrdenes = async (_req: Request, res: Response) => {
+export const getOrdenes = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const ordenes = await getRepository(OrdenServicio).find();
-    return res.send(ordenes);
+    const ordenes = await OrdenService.findAll();
+    return res.status(200).send(ordenes);
   } catch (err) {
-    return res.status(500).send(err);
+    next(err);
   }
 };
 
-export const getOrdenServicioById = async (req: Request, res: Response) => {
-  const returnRelations = req.query.relations === 'true';
-  const options: FindOneOptions<OrdenServicio> = returnRelations
-    ? { relations: ['historias', 'items'] }
-    : {};
+export const getOrdenServicioById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const orden = await getRepository(OrdenServicio).findOne(
-      req.params.ordenId,
-      options
+    const orden = await OrdenService.findById(parseInt(req.params.ordenId));
+    return res.status(200).send(orden);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const updateOrdenServicioById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const isUpdated = OrdenService.findAndUpdateById(
+      parseInt(req.params.ordenId),
+      {
+        empresaId: req.body.empresaId,
+        estado: req.body.estado,
+        items: req.body.items,
+        numOrden: req.body.numOrden,
+      }
     );
-    if (orden) {
-      return res.status(200).send(orden);
-    }
-    return res.status(404).send({ msg: 'No encontrado' });
+    if (!isUpdated) throw new Error('Not Found');
+    return res.sendStatus(200);
   } catch (err) {
-    return res.status(500).send(err);
+    return next(err);
   }
 };
 
-/**
- * Solo se puede hacer update a `estado` y `numOrden`
- */
-export const updateOrdenServicioById = async (req: Request, res: Response) => {
-  const { estado, numOrden } = req.body;
+export const addItemToOrdenById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const orden = await getRepository(OrdenServicio).findOne(
-      req.params.ordenId
-    );
-    if (orden) {
-      orden.estado = estado ? estado : orden.estado;
-      orden.numOrden = numOrden ? numOrden : orden.numOrden;
-      await orden.save();
-      return res.status(200).send(orden);
-    }
-    return res.status(404).send({ msg: 'No encontrado' });
+    const item = await ItemService.create({
+      ordenId: parseInt(req.params.ordenId),
+      name: req.body.name,
+      totalDespachar: req.body.totalDespachar,
+    });
+    return res.status(201).send(item);
   } catch (err) {
-    return res.status(500).send(err);
+    return next(err);
+  }
+};
+
+export const addHistorToItemInOrdenById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const history = await HistoryService.create({
+      tipoId: req.body.tipoId,
+      peso: req.body.peso,
+      itemId: parseInt(req.params.itemId),
+      ordenId: parseInt(req.params.ordenId),
+    });
+    return res.status(201).send(history);
+  } catch (err) {
+    return next(err);
   }
 };
