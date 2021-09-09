@@ -27,7 +27,7 @@ class TipoService {
       throw new Error(err);
     }
   }
-};
+}
 
 
 export default new TipoService();
