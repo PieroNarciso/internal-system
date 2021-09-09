@@ -2,6 +2,7 @@ import { OpenAPIV3 } from 'openapi-types';
 import { userComponents, userPaths } from '@/docs/user';
 import { empresaComponents, empresaPaths } from './empresa';
 import { ordenComponents, ordenPaths } from './orden';
+import { tipoComponents, tipoPaths } from './tipo';
 
 
 const components: OpenAPIV3.ComponentsObject = {
@@ -9,6 +10,7 @@ const components: OpenAPIV3.ComponentsObject = {
     ...userComponents,
     ...empresaComponents,
     ...ordenComponents,
+    ...tipoComponents,
   }
 };
 
@@ -17,13 +19,15 @@ const tags: OpenAPIV3.TagObject[] = [
   { name: 'Empresa' },
   { name: 'Orden' },
   { name: 'Item' },
-  { name: 'Historia' }
+  { name: 'Historia' },
+  { name: 'Tipo' },
 ];
 
 const paths: OpenAPIV3.PathsObject= {
   ...userPaths,
   ...empresaPaths,
   ...ordenPaths,
+  ...tipoPaths,
 };
 
 export const swaggerDocument: OpenAPIV3.Document = {

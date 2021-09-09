@@ -5,10 +5,6 @@ export const userComponents: OpenAPIV3.ComponentsObject['schemas'] = {
     type: 'string',
     enum: ['activo', 'inactivo', 'completado'],
   },
-  HistoriaTipoNombre: {
-    type: 'string',
-    enum: ['despacho', 'produccion'],
-  },
   UserRole: {
     type: 'string',
     enum: ['usuario', 'admin'],
