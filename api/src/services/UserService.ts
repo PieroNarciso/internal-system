@@ -31,7 +31,7 @@ class UserService {
   ): Promise<Usuario> {
     if (!username) throw new Error('Not username');
     try {
-      const select: (keyof Usuario)[] = ['uuid', 'username'];
+      const select: (keyof Usuario)[] = ['uuid', 'username', 'role'];
       if (includePassword) select.push('password');
       const user = await getRepository(Usuario).findOne(
         { username },
