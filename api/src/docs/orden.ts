@@ -17,17 +17,14 @@ export const ordenComponents: OpenAPIV3.ComponentsObject['schemas'] = {
       estado: {
         $ref: '#/components/schemas/EstadoOrdenServicio'
       },
-      totalDespachado: {
-        type: 'number',
-      },
-      totalDespachar: {
-        type: 'number'
-      }
     }
   },
   Item: {
     type: 'object',
     properties: {
+      id: {
+        type: 'number',
+      },
       uuid: {
         type: 'string',
       },
@@ -45,6 +42,9 @@ export const ordenComponents: OpenAPIV3.ComponentsObject['schemas'] = {
   Historia: {
     type: 'object',
     properties: {
+      id: {
+        type: 'number',
+      },
       uuid: {
         type: 'string',
       },
@@ -73,12 +73,6 @@ export const ordenComponents: OpenAPIV3.ComponentsObject['schemas'] = {
       },
       estado: {
         $ref: '#/components/schemas/EstadoOrdenServicio',
-      },
-      totalDespachado: {
-        type: 'number',
-      },
-      totalDespachar: {
-        type: 'number',
       },
       items: {
         type: 'array',
@@ -207,7 +201,21 @@ export const ordenPaths: OpenAPIV3.PathsObject = {
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/Orden'
+                type: 'object',
+                allOf: [
+                  { $ref: '#/components/schemas/Orden' },
+                  {
+                    type: 'object',
+                    properties: {
+                      items: {
+                        type: 'array',
+                        items: {
+                          $ref: '#/components/schemas/Item',
+                        }
+                      }
+                    }
+                  }
+                ]
               }
             }
           }
