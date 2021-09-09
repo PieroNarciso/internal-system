@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import { Role } from '@/types';
 import UserService from '@/services/UserService';
+import { SESSION_NAME } from '@/config/env';
 
 export const createUser = async (
   req: Request,
@@ -55,4 +56,15 @@ export const loginUser = async (
   } catch (err) {
     return next(err);
   }
+};
+
+export const logoutUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  req.session.destroy((err) => {
+    if (err) return next(err);
+    else return res.clearCookie(SESSION_NAME).sendStatus(200);
+  });
 };

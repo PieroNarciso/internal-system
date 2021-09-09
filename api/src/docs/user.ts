@@ -99,6 +99,20 @@ export const userPaths: OpenAPIV3.PathsObject = {
       }
     },
   },
+  '/users/logout': {
+    post: {
+      summary: 'Logout User',
+      tags: ['User'],
+      responses: {
+        '200': {
+          description: 'Successfully logout',
+        },
+        '500': {
+          description: 'Internal Server Error',
+        }
+      },
+    },
+  },
   '/users': {
     post: {
       summary: 'Create an User',
