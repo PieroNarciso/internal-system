@@ -1,12 +1,12 @@
 import { getRepository } from 'typeorm';
 
 import { Tipo } from '@/models/Tipo';
-import { Estado } from '@/types';
+import { TipoNombre } from '@/types';
 
 
 class TipoService {
 
-  public async create(payload: { tipoName: Estado }): Promise<Tipo> {
+  public async create(payload: { tipoName: TipoNombre }): Promise<Tipo> {
     try {
       if (!payload.tipoName) throw new Error('Missing tipo name');
       const tipo = getRepository(Tipo).create({
