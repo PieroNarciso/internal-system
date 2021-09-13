@@ -5,7 +5,6 @@ import { Usuario } from '../../models/Usuario';
 import UserService from '../UserService';
 
 describe('UserService unit tests', () => {
-
   beforeAll(async () => {
     await dbConnection();
   });
@@ -22,7 +21,7 @@ describe('UserService unit tests', () => {
     await UserService.create({
       username: 'test',
       password: 'test',
-      email: 'test@test.com'
+      email: 'test@test.com',
     });
     const user = await UserService.findByUsername('test');
     expect(user).toBeInstanceOf(Usuario);
@@ -60,5 +59,74 @@ describe('UserService unit tests', () => {
     });
     const user = await UserService.findByUsername(username);
     expect(user).toBeInstanceOf(Usuario);
+  });
+
+  it('should throw error with uuid that does not exists', async () => {
+    try {
+      await UserService.findByUuid('fakeuuid');
+    } catch (err) {
+      expect(err).toBeDefined();
+    }
+  });
+
+  it('should find a user with uuid that exists', async () => {
+    const userCreated = await UserService.create({
+      username: 'test',
+      password: 'test',
+      email: 'test@test.com',
+    });
+    const user = await UserService.findByUuid(userCreated.uuid);
+    expect(user.username).toBe(userCreated.username);
+  });
+
+  it('should return true if a password is correct', async () => {
+    const credentials = {
+      username: 'test',
+      password: 'test',
+    };
+    const user = await UserService.create({
+      username: credentials.username,
+      password: credentials.password,
+      email: 'test@test.com',
+    });
+    const isValid = await UserService.verifyPasswordValidity(
+      credentials.password,
+      user.password
+    );
+    expect(isValid).toBe(true);
+  });
+
+  it('should return false if a password is incorrect', async () => {
+    const credentials = {
+      username: 'test',
+      password: 'test',
+    };
+    const user = await UserService.create({
+      username: credentials.username,
+      password: credentials.password,
+      email: 'test@test.com',
+    });
+    const isValid = await UserService.verifyPasswordValidity(
+      'incorrectpassword',
+      user.password
+    );
+    expect(isValid).toBe(false);
+  });
+
+  it('should find a user by credentials that exists', async () => {
+    const credentials = {
+      username: 'test',
+      password: 'test',
+    };
+    await UserService.create({
+      username: credentials.username,
+      password: credentials.password,
+      email: 'test@test.com',
+    });
+    const user = await UserService.findByCredentials(
+      credentials.username,
+      credentials.password
+    );
+    expect(user.username).toBe(credentials.username);
   });
 });
