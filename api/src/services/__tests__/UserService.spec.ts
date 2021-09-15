@@ -129,4 +129,18 @@ describe('UserService unit tests', () => {
     );
     expect(user.username).toBe(credentials.username);
   });
+
+  it('should not find a user by credential that does not exists', async () => {
+    const credentials = {
+      username: 'test',
+      password: 'test',
+    };
+    try {
+      await UserService.findByCredentials(
+        credentials.username, credentials.password
+      );
+    } catch (err) {
+      expect(err).toBeDefined();
+    }
+  });
 });
