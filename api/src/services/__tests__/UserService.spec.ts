@@ -4,19 +4,34 @@ import { dbConnection } from '../../config/db';
 import { Usuario } from '../../models/Usuario';
 import UserService from '../UserService';
 
-describe('UserService unit tests', () => {
-  beforeAll(async () => {
-    await dbConnection();
-  });
+export const USER_USUARIO_ROLE_DATA = {
+  username: 'test',
+  password: 'test',
+  email: 'test@test.com',
+};
 
-  afterEach(async () => {
-    await getConnection().synchronize(true);
-  });
+export const testsUserIntancesInitialize = async () => {
+  await Usuario.create({
+    username: USER_USUARIO_ROLE_DATA.username,
+    password: USER_USUARIO_ROLE_DATA.password,
+    email: USER_USUARIO_ROLE_DATA.email,
+  }).save();
+};
+export const NUMBER_USER_INSTANCES_INITIALIZED = 1;
 
-  afterAll(async () => {
-    await getConnection().close();
-  });
+beforeAll(async () => {
+  await dbConnection();
+});
 
+afterEach(async () => {
+  await getConnection().synchronize(true);
+});
+
+afterAll(async () => {
+  await getConnection().close();
+});
+
+describe('UserService create method', () => {
   it('should create an user', async () => {
     await UserService.create({
       username: 'test',
@@ -25,17 +40,6 @@ describe('UserService unit tests', () => {
     });
     const user = await UserService.findByUsername('test');
     expect(user).toBeInstanceOf(Usuario);
-  });
-
-  it('should hash the password of the user on create', async () => {
-    const password = 'test';
-    await UserService.create({
-      username: 'test',
-      password: 'test',
-      email: 'test@test.com',
-    });
-    const user = await UserService.findByUsername('test');
-    expect(user.password !== password).toBe(true);
   });
 
   it('should fail by creating an user with invalid email', async () => {
@@ -50,17 +54,36 @@ describe('UserService unit tests', () => {
     }
   });
 
-  it('should find a username by username attribute', async () => {
-    const username = 'test';
-    await UserService.create({
-      username: username,
+  it('should hash the password of the user on create', async () => {
+    const password = 'test';
+    const user = await UserService.create({
+      username: 'test',
       password: 'test',
       email: 'test@test.com',
     });
-    const user = await UserService.findByUsername(username);
+    expect(user.password !== password).toBe(true);
+  });
+});
+
+describe('UserService findByUsername method', () => {
+  it('should find a user by username attribute', async () => {
+    await testsUserIntancesInitialize();
+    const user = await UserService.findByUsername(
+      USER_USUARIO_ROLE_DATA.username
+    );
     expect(user).toBeInstanceOf(Usuario);
   });
 
+  it('should not find a username that does not exists', async () => {
+    try {
+      await UserService.findByUsername('notExistingUsername');
+    } catch (err) {
+      expect(err).toBeDefined();
+    }
+  });
+});
+
+describe('UserService findByUuid method', () => {
   it('should throw error with uuid that does not exists', async () => {
     try {
       await UserService.findByUuid('fakeuuid');
@@ -70,41 +93,32 @@ describe('UserService unit tests', () => {
   });
 
   it('should find a user with uuid that exists', async () => {
-    const userCreated = await UserService.create({
-      username: 'test',
-      password: 'test',
-      email: 'test@test.com',
-    });
-    const user = await UserService.findByUuid(userCreated.uuid);
-    expect(user.username).toBe(userCreated.username);
+    await testsUserIntancesInitialize();
+    const userCreated = await Usuario.findOne();
+    const user = await UserService.findByUuid(userCreated!.uuid);
+    expect(user.username).toBe(userCreated!.username);
   });
+});
 
+describe('UserService verifyPasswordValidity method', () => {
   it('should return true if a password is correct', async () => {
-    const credentials = {
-      username: 'test',
-      password: 'test',
-    };
     const user = await UserService.create({
-      username: credentials.username,
-      password: credentials.password,
-      email: 'test@test.com',
+      username: USER_USUARIO_ROLE_DATA.username,
+      password: USER_USUARIO_ROLE_DATA.password,
+      email: USER_USUARIO_ROLE_DATA.email,
     });
     const isValid = await UserService.verifyPasswordValidity(
-      credentials.password,
+      USER_USUARIO_ROLE_DATA.password,
       user.password
     );
     expect(isValid).toBe(true);
   });
 
   it('should return false if a password is incorrect', async () => {
-    const credentials = {
-      username: 'test',
-      password: 'test',
-    };
     const user = await UserService.create({
-      username: credentials.username,
-      password: credentials.password,
-      email: 'test@test.com',
+      username: USER_USUARIO_ROLE_DATA.username,
+      password: USER_USUARIO_ROLE_DATA.password,
+      email: USER_USUARIO_ROLE_DATA.email,
     });
     const isValid = await UserService.verifyPasswordValidity(
       'incorrectpassword',
@@ -112,32 +126,27 @@ describe('UserService unit tests', () => {
     );
     expect(isValid).toBe(false);
   });
+});
 
+describe('UserService findByCredentials method', () => {
   it('should find a user by credentials that exists', async () => {
-    const credentials = {
-      username: 'test',
-      password: 'test',
-    };
     await UserService.create({
-      username: credentials.username,
-      password: credentials.password,
-      email: 'test@test.com',
+      username: USER_USUARIO_ROLE_DATA.username,
+      password: USER_USUARIO_ROLE_DATA.password,
+      email: USER_USUARIO_ROLE_DATA.email,
     });
     const user = await UserService.findByCredentials(
-      credentials.username,
-      credentials.password
+      USER_USUARIO_ROLE_DATA.username,
+      USER_USUARIO_ROLE_DATA.password
     );
-    expect(user.username).toBe(credentials.username);
+    expect(user.username).toBe(USER_USUARIO_ROLE_DATA.username);
   });
 
   it('should not find a user by credential that does not exists', async () => {
-    const credentials = {
-      username: 'test',
-      password: 'test',
-    };
     try {
       await UserService.findByCredentials(
-        credentials.username, credentials.password
+        USER_USUARIO_ROLE_DATA.username,
+        USER_USUARIO_ROLE_DATA.password
       );
     } catch (err) {
       expect(err).toBeDefined();
