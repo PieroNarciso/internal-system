@@ -16,11 +16,13 @@ export interface OrdenCreate
   items?: ItemCreate[];
 }
 
-export interface Orden extends OrdenBase {}
+export interface Orden extends OrdenBase {
+  items: Item[];
+}
 
 export interface OrdenDetail extends OrdenBase {
   items: Item[];
-  historias: History;
+  historias: History[];
 }
 
 export interface OrdenUpdate extends Partial<OrdenCreate> {
