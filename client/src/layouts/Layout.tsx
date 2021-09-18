@@ -26,7 +26,7 @@ const Layout: React.FC = ({ children }) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" color="inherit">
-            Title
+            Texaf
           </Typography>
         </Toolbar>
       </AppBar>
