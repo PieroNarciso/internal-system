@@ -5,6 +5,9 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
+import { loginUser } from '@/store/user/user.thunks';
+import { useAppDispatch } from '@/hooks';
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
@@ -13,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Login: React.FC = () => {
   const classes = useStyles();
+  const dispatch = useAppDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -21,6 +25,22 @@ const Login: React.FC = () => {
   };
   const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
+  };
+
+  const loginOnSubmit = async () => {
+    try {
+      await dispatch(
+        loginUser({
+          username,
+          password,
+        })
+      ).unwrap();
+    } catch (err) {
+      console.log();
+    } finally {
+      setUsername('');
+      setPassword('');
+    }
   };
 
   return (
@@ -48,7 +68,7 @@ const Login: React.FC = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <Button>Ingresar</Button>
+          <Button onClick={loginOnSubmit}>Ingresar</Button>
         </Grid>
       </Grid>
     </Paper>
