@@ -1,27 +1,29 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { Business } from '@/interfaces/business.interface'
+import { Business } from '@/interfaces/business.interface';
+import { createBusinessEntry, fetchBusinessEntries } from './business.thunks';
 
 interface BusinessState {
-  business: Business[];
+  businesses: Business[];
 }
 
 const initialState: BusinessState = {
-  business: [],
+  businesses: [],
 };
 
 const businessSlice = createSlice({
   name: 'business',
   initialState,
-  reducers: {
-    replaceBusiness(state, action: PayloadAction<Business[]>) {
-      state.business = action.payload.sort((a, b) => {
-        if (a.razonSocial < b.razonSocial) return -1;
-        else if (a.razonSocial > b.razonSocial) return 1;
-        else return 0;
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchBusinessEntries.fulfilled, (state, action) => {
+        state.businesses = action.payload;
+      })
+      .addCase(createBusinessEntry.fulfilled, (state, action) => {
+        state.businesses.push(action.payload);
       });
-    },
-  }
+  },
 });
 
 export const businessActions = businessSlice.actions;
