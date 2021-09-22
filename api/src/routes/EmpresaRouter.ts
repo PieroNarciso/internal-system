@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import { createEmpresa, getEmpresaById } from '../controllers';
+import { createEmpresa, fetchAllEmpresas, getEmpresaById } from '../controllers';
 
 
 const empresaRouter = Router();
 
 
+empresaRouter.get('/', fetchAllEmpresas);
 empresaRouter.post('/', createEmpresa);
 empresaRouter.get('/:empresaId', getEmpresaById);
 

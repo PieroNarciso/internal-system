@@ -22,3 +22,12 @@ export const getEmpresaById = async (req: Request, res: Response, next: NextFunc
     next(err);
   }
 };
+
+export const fetchAllEmpresas = async (_: Request, res: Response, next: NextFunction) => {
+  try {
+    const empresas = await EmpresaService.fetchAll();
+    return res.status(200).send(empresas);
+  } catch (err) {
+    next(err);
+  }
+};
