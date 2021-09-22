@@ -31,6 +31,28 @@ export const empresaComponents: OpenAPIV3.ComponentsObject['schemas'] = {
 
 export const empresaPaths: OpenAPIV3.PathsObject = {
   '/empresas': {
+    get: {
+      summary: 'Fetch all empresa intances',
+      tags: ['Empresa'],
+      responses: {
+        200: {
+          description: 'Success',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'array',
+                items: {
+                  $ref: '#/components/schemas/Empresa'
+                }
+              }
+            }
+          }
+        },
+        500: {
+          description: 'Internal Error'
+        }
+      },
+    },
     post: {
       summary: 'Create empresa instance',
       tags: ['Empresa'],

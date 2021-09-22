@@ -31,6 +31,15 @@ class EmpresaService {
       throw new Error(err);
     }
   }
+
+  public async fetchAll() {
+    try {
+      const empresas = await getRepository(Empresa).find();
+      return empresas;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
 }
 
 export default new EmpresaService();

@@ -10,7 +10,7 @@ export const USER_USUARIO_ROLE_DATA = {
   email: 'test@test.com',
 };
 
-export const testsUserIntancesInitialize = async () => {
+export const testsUserIntancesInitialize = async (): Promise<void> => {
   await Usuario.create({
     username: USER_USUARIO_ROLE_DATA.username,
     password: USER_USUARIO_ROLE_DATA.password,
