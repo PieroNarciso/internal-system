@@ -35,7 +35,7 @@ class OrdenService {
   public async findAll(): Promise<OrdenServicio[]> {
     try {
       const ordenes = await getRepository(OrdenServicio).find({
-        relations: ['items'],
+        relations: ['items', 'empresa'],
       });
       return ordenes;
     } catch (err) {
