@@ -6,7 +6,7 @@ import { ItemCreate, Item } from '@/interfaces/item.interface';
 import { HistoryCreate } from '@/interfaces/history.interface';
 
 export const fetchOrdenes = createAsyncThunk('ordenes/fetch', async () => {
-  const response = await api.get<Orden>('/ordenes');
+  const response = await api.get<Orden[]>('/ordenes');
   return response.data;
 });
 

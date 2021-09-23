@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Modal from '@material-ui/core/Modal';
 import Box from '@material-ui/core/Box';
@@ -22,7 +22,10 @@ import RemoveCircle from '@material-ui/icons/RemoveCircle';
 
 import makeStyle from '@material-ui/core/styles/makeStyles';
 
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { ItemCreate } from '@/interfaces/item.interface';
+import { createOrden } from '@/store/orden/orden.thunks';
+import { fetchBusinessEntries } from '@/store/business/business.thunks';
 
 interface OrdenAddProps {
   onClose: () => void;
@@ -46,10 +49,16 @@ const useStyle = makeStyle({
 });
 
 const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, open }) => {
+  const dispatch = useAppDispatch();
   const classes = useStyle();
+  const empresas = useAppSelector(state => state.business.businesses);
   const [empresaId, setEmpresaId] = useState<number>(0);
   const [numOrden, setNumOrden] = useState('');
   const [itemstoCreate, setItemsToCreate] = useState<ItemCreate[]>([]);
+
+  useEffect(() => {
+    dispatch(fetchBusinessEntries());
+  }, []);
 
   const handleChangeEmpresaId = (
     event: React.ChangeEvent<{ value: unknown }>
@@ -101,6 +110,15 @@ const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, open }) => {
     });
   };
 
+  const addNewOrden = async () => {
+    await dispatch(createOrden({
+      empresaId,
+      numOrden,
+      items: itemstoCreate,
+    })).unwrap();
+    onClose();
+  }
+
   return (
     <Modal onClose={onClose} open={open}>
       <Box className={classes.modal}>
@@ -120,7 +138,9 @@ const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, open }) => {
                   <MenuItem value={0} disabled selected>
                     Empresa
                   </MenuItem>
-                  <MenuItem value={1}>Tsonkiri</MenuItem>
+                  {empresas.map(empresa => (
+                    <MenuItem value={empresa.id}>{empresa.razonSocial}</MenuItem>
+                  ))}
                 </Select>
               </Grid>
               <Grid item xs={12}>
@@ -195,7 +215,7 @@ const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, open }) => {
           </CardContent>
           <CardActions>
             <Button onClick={onClose}>Cancelar</Button>
-            <Button>Guardar</Button>
+            <Button onClick={addNewOrden}>Guardar</Button>
           </CardActions>
         </Card>
       </Box>

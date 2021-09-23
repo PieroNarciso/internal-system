@@ -10,9 +10,9 @@ interface OrdenListProps {
 
 const OrdenList: React.FC<OrdenListProps> = ({ ordenes }) => {
   return (
-    <Grid container>
+    <Grid container spacing={1}>
       {ordenes.map((orden) => (
-        <Grid item key={orden.id}>
+        <Grid item xs={12} key={orden.id}>
           <OrdenItem
             id={orden.id}
             items={orden.items}

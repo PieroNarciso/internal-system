@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -9,7 +9,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import OrdenList from '@/components/Orden/OrdenList';
 import OrdenAddModal from '@/components/Orden/OrdenAddModal';
 
-import { useAppSelector } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { fetchOrdenes } from '@/store/orden/orden.thunks';
 
 const useStyle = makeStyles({
   container: {
@@ -18,10 +19,14 @@ const useStyle = makeStyles({
 });
 
 const Home: React.FC = () => {
+  const dispatch = useAppDispatch();
   const classes = useStyle();
   const ordenes = useAppSelector(state => state.orden.ordenes);
   const [openModal, setOpenModal] = useState(false);
 
+  useEffect(() => {
+    dispatch(fetchOrdenes());
+  }, []);
 
   const modalHandleClose = () => setOpenModal(false);
   const modalHandleOpen = () => setOpenModal(true);

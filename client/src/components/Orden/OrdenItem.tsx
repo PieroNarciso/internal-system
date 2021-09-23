@@ -28,7 +28,7 @@ const OrdenItem: React.FC<OrdenItemProps> = (props) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Link to={`/orden/${props.id}`}>
+        <Link to={`/ordenes/${props.id}`}>
           <Button>Ver Orden</Button>
         </Link>
       </CardActions>

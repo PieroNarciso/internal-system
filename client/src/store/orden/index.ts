@@ -1,5 +1,6 @@
 import { Orden, OrdenDetail } from '@/interfaces/orden.interface';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { createOrden, fetchOrdenes } from './orden.thunks';
 
 interface OrdenState {
   ordenes: Orden[];
@@ -13,18 +14,15 @@ const initialState: OrdenState = {
 const ordenSlice = createSlice({
   name: 'orden',
   initialState,
-  reducers: {
-    addOrden(state, action: PayloadAction<Orden>) {
-      state.ordenes = [action.payload, ...state.ordenes];
-    },
-    removeOrden(state, action: PayloadAction<Orden['id']>) {
-      state.ordenes = state.ordenes.filter(
-        (orden) => orden.id !== action.payload
-      );
-    },
-    setCurrentOrden(state, action: PayloadAction<OrdenDetail>) {
-      state.currentOrden = { ...action.payload }
-    }
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchOrdenes.fulfilled, (state, action) => {
+        state.ordenes = action.payload;
+      })
+      .addCase(createOrden.fulfilled, (state, action) => {
+        state.ordenes = [action.payload, ...state.ordenes];
+      });
   },
 });
 
