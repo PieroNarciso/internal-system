@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks';
 import { ItemCreate } from '@/interfaces/item.interface';
 import { createOrden } from '@/store/orden/orden.thunks';
 import { fetchBusinessEntries } from '@/store/business/business.thunks';
-import { Modal, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import { Modal, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 
 interface OrdenAddProps {
   isOpen: boolean;
@@ -27,7 +27,9 @@ const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, isOpen }) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
+          Crear Orden de Servicio
         </ModalHeader>
+        <ModalCloseButton />
       </ModalContent>
     </Modal>
   );
