@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import {
   Box,
-  Button,
   Container,
   Drawer,
   DrawerBody,
@@ -33,23 +32,31 @@ const Layout: React.FC = ({ children }) => {
               onClick={onOpen}
             />
             <Heading size="md" marginLeft="2">
-              Texaf App
+              <RouterLink to="/">Texaf App</RouterLink>
             </Heading>
           </Flex>
         </Box>
         <Spacer />
         <Box>
-          <Link px="3" py="2" bgColor="blue.400" rounded="md" textColor="white" as={RouterLink} to="/login">Ingresar</Link>
+          <Link
+            px="3"
+            py="2"
+            bgColor="blue.400"
+            rounded="md"
+            textColor="white"
+            as={RouterLink}
+            to="/login"
+          >
+            Ingresar
+          </Link>
         </Box>
       </Flex>
       <Drawer isOpen={isOpen} onClose={onClose} placement="left">
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerBody>
-          </DrawerBody>
-          <DrawerFooter>
-          </DrawerFooter>
+          <DrawerBody></DrawerBody>
+          <DrawerFooter></DrawerFooter>
         </DrawerContent>
       </Drawer>
       <Container marginTop="4">{children!}</Container>
