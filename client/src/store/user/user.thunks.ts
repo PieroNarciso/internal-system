@@ -7,7 +7,6 @@ export const loginUser = createAsyncThunk(
   'users/login',
   async (userData: UserLogin) => {
     const response = await api.post<User>('/users/login', userData);
-    console.log(response);
     return response.data;
   }
 );

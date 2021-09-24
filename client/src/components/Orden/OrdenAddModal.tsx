@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppDispatch } from '@/hooks';
 import { ItemCreate } from '@/interfaces/item.interface';
 import { createOrden } from '@/store/orden/orden.thunks';
 import { fetchBusinessEntries } from '@/store/business/business.thunks';
-import { Modal, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+} from '@chakra-ui/react';
+
+import OrdenForm from '@/components/Orden/OrdenForm';
 
 interface OrdenAddProps {
   isOpen: boolean;
@@ -13,10 +24,60 @@ interface OrdenAddProps {
 
 const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, isOpen }) => {
   const dispatch = useAppDispatch();
-  const empresas = useAppSelector(state => state.business.businesses);
   const [empresaId, setEmpresaId] = useState<number>(0);
   const [numOrden, setNumOrden] = useState('');
-  const [itemstoCreate, setItemsToCreate] = useState<ItemCreate[]>([]);
+  const [items, setItems] = useState<ItemCreate[]>([]);
+
+  const empresaIdHandler = (event: React.ChangeEvent<HTMLSelectElement>) =>
+    setEmpresaId(parseInt(event.target.value));
+  const numOrdenHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setNumOrden(event.target.value);
+
+  const addNewItem = () => {
+    setItems((prevState) => {
+      return [...prevState, { name: '', totalDespachar: 0 }];
+    });
+  };
+  const deleteItem = (index: number) => {
+    setItems((prevState) => {
+      const newState = [...prevState];
+      newState.splice(index, 1);
+      return newState;
+    });
+  };
+  const changeNameValueInItem = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setItems((prevState) => {
+      const newState = [...prevState];
+      newState[index].name = event.target.value;
+      return newState;
+    });
+  };
+  const changeDespacharValueInItem = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setItems((prevState) => {
+      const newState = [...prevState];
+      newState[index].totalDespachar = parseFloat(event.target.value);
+      return newState;
+    });
+  };
+
+  const createOrdenOnSubmit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    dispatch(
+      createOrden({
+        empresaId,
+        numOrden,
+        items,
+      })
+    );
+  };
 
   useEffect(() => {
     dispatch(fetchBusinessEntries());
@@ -26,10 +87,31 @@ const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, isOpen }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>
-          Crear Orden de Servicio
-        </ModalHeader>
-        <ModalCloseButton />
+        <form onSubmit={createOrdenOnSubmit}>
+          <ModalHeader>Crear Orden de Servicio</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <OrdenForm
+              empresaIdValue={empresaId}
+              empresaIdHandler={empresaIdHandler}
+              numOrdenValue={numOrden}
+              numOrdenHandler={numOrdenHandler}
+              items={items}
+              addNewItem={addNewItem}
+              deleteItem={deleteItem}
+              changeNameValueInItem={changeNameValueInItem}
+              changeDespacharValueInItem={changeDespacharValueInItem}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button type="button" colorScheme="blackAlpha" onClick={onClose}>
+              Cerrar
+            </Button>
+            <Button type="submit" marginLeft="3" colorScheme="blue">
+              Guardar
+            </Button>
+          </ModalFooter>
+        </form>
       </ModalContent>
     </Modal>
   );
