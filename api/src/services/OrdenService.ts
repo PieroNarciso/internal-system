@@ -26,6 +26,7 @@ class OrdenService {
           })
         );
       }
+      await orden.empresa.reload();
       return orden;
     } catch (err) {
       throw new Error(err);
@@ -35,7 +36,7 @@ class OrdenService {
   public async findAll(): Promise<OrdenServicio[]> {
     try {
       const ordenes = await getRepository(OrdenServicio).find({
-        relations: ['items'],
+        relations: ['items', 'empresa'],
       });
       return ordenes;
     } catch (err) {

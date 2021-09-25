@@ -10,9 +10,6 @@ export const createUser = async (
   next: NextFunction
 ) => {
   try {
-    if (!req.body.password || !req.body.username || !req.body.email) {
-      throw new Error('Missing attributes');
-    }
     const user = await UserService.create({
       username: req.body.username,
       email: req.body.email,
@@ -43,9 +40,6 @@ export const loginUser = async (
   next: NextFunction
 ) => {
   try {
-    if (!req.body.username || !req.body.password) {
-      throw new Error('No credentials provided');
-    }
     const user = await UserService.findByCredentials(
       req.body.username,
       req.body.password

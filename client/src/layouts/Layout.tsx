@@ -1,42 +1,65 @@
+import React, { Fragment } from 'react';
 import {
-  AppBar,
+  Box,
   Container,
   Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerOverlay,
+  Flex,
+  Heading,
   IconButton,
-  Toolbar,
-  Typography,
-} from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import React, { Fragment, useState } from 'react';
+  Link,
+  Spacer,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { MdMenu } from 'react-icons/md';
+import { Link as RouterLink } from 'react-router-dom';
 
 const Layout: React.FC = ({ children }) => {
-  const [drawerState, setDrawerState] = useState(false);
-
-  const toggleDrawer = (newState: boolean) => {
-    setDrawerState(newState);
-  };
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Fragment>
-      <AppBar position="sticky">
-        <Toolbar variant="dense">
-          <IconButton
-            edge="start"
-            color="inherit"
-            onClick={() => toggleDrawer(true)}
+      <Flex p="2" bgColor="gray.200" alignItems="center">
+        <Box p="2">
+          <Flex align="center">
+            <IconButton
+              aria-label="Drawer button"
+              icon={<MdMenu />}
+              onClick={onOpen}
+            />
+            <Heading size="md" marginLeft="2">
+              <RouterLink to="/">Texaf App</RouterLink>
+            </Heading>
+          </Flex>
+        </Box>
+        <Spacer />
+        <Box>
+          <Link
+            px="3"
+            py="2"
+            bgColor="blue.400"
+            rounded="md"
+            textColor="white"
+            as={RouterLink}
+            to="/login"
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" color="inherit">
-            Title
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
-      <Drawer open={drawerState} onClose={() => toggleDrawer(false)}>
-        Drawer
+            Ingresar
+          </Link>
+        </Box>
+      </Flex>
+      <Drawer isOpen={isOpen} onClose={onClose} placement="left">
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerBody></DrawerBody>
+          <DrawerFooter></DrawerFooter>
+        </DrawerContent>
       </Drawer>
-      <Container>{children!}</Container>
+      <Container marginTop="4">{children!}</Container>
     </Fragment>
   );
 };

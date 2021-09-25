@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
 import Layout from '@/layouts/Layout';
 import Home from '@/views/Home';
@@ -11,7 +11,12 @@ const App: React.FC = () => {
       <Layout>
         <Switch>
           <Route path="/" exact>
-            <Home />
+            <Redirect to="/ordenes" />
+          </Route>
+          <Route path="/ordenes" exact>
+            <Home/ >
+          </Route>
+          <Route path="/ordenes/:ordenId">
           </Route>
           <Route path="/login">
             <Login />
