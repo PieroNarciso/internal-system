@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 
 import Layout from '@/layouts/Layout';
 import Home from '@/views/Home';
-import Login from './views/Login';
+import Login from '@/views/Login';
+import OrdenDetail from '@/views/OrdenDetail';
 
 const App: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
             <Home/ >
           </Route>
           <Route path="/ordenes/:ordenId">
+            <OrdenDetail />
           </Route>
           <Route path="/login">
             <Login />
