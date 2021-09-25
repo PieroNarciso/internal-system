@@ -26,6 +26,7 @@ class OrdenService {
           })
         );
       }
+      await orden.empresa.reload();
       return orden;
     } catch (err) {
       throw new Error(err);
