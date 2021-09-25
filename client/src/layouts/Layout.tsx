@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import {
   Box,
+  Button,
   Container,
   Drawer,
   DrawerBody,
@@ -39,15 +40,12 @@ const Layout: React.FC = ({ children }) => {
         <Spacer />
         <Box>
           <Link
-            px="3"
-            py="2"
-            bgColor="blue.400"
-            rounded="md"
-            textColor="white"
             as={RouterLink}
             to="/login"
           >
+          <Button size="sm" colorScheme="gray">
             Ingresar
+          </Button>
           </Link>
         </Box>
       </Flex>
@@ -59,7 +57,7 @@ const Layout: React.FC = ({ children }) => {
           <DrawerFooter></DrawerFooter>
         </DrawerContent>
       </Drawer>
-      <Container marginTop="4">{children!}</Container>
+      <Container marginY="4">{children!}</Container>
     </Fragment>
   );
 };
