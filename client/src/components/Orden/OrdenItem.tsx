@@ -1,5 +1,14 @@
 import { Orden } from '@/interfaces/orden.interface';
-import { Badge, Box, Link, Flex, Spacer } from '@chakra-ui/react';
+import { Estado } from '@/types';
+import {
+  Badge,
+  Box,
+  Link,
+  Flex,
+  Spacer,
+  ColorProps,
+  Button,
+} from '@chakra-ui/react';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -13,26 +22,33 @@ const OrdenItem: React.FC<OrdenItemProps> = (props) => {
     totalDespachado += item.totalDespachado;
     totalDespachar += item.totalDespachar;
   }
+  let badgeColor = 'green';
+  if (props.estado === Estado.COMPLETADO) badgeColor = 'red';
+  if (props.estado === Estado.INACTIVO) badgeColor = 'yellow';
 
   return (
-    <Box borderColor="gray.400" borderWidth="thin" width="full">
+    <Box borderRadius="lg" borderWidth="1px" width="full" p="3">
       <Flex direction="column">
-        <Flex alignItems="center">
-          <Badge borderRadius="full" height="5" width="5" />
-          <Box as="h4" isTruncated>
+        <Flex alignItems="center" justifyContent="center">
+          <Box as="h4" isTruncated fontWeight="semibold">
             {props.empresa.razonSocial}
           </Box>
           <Spacer />
-          <Box>{props.numOrden}</Box>
+          <Box>OS {props.numOrden}</Box>
         </Flex>
-        <Flex>
+        <Flex alignItems="center" justifyContent="space-between" marginTop="2">
           <Box>
-            {totalDespachado} KG / {totalDespachar} KG
+            {totalDespachado.toFixed(2)} KG / {totalDespachar.toFixed(2)} KG
           </Box>
+          <Badge borderRadius="md" variant="solid" colorScheme={badgeColor}>
+            {props.estado}
+          </Badge>
         </Flex>
-        <Flex justifyContent="end">
+        <Flex justifyContent="end" marginTop="2">
           <Link as={RouterLink} to={`/ordenes/${props.id}`}>
-            Ver Orden
+            <Button colorScheme="blue" size="sm">
+              Ver Orden
+            </Button>
           </Link>
         </Flex>
       </Flex>

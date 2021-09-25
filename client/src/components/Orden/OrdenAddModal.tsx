@@ -98,7 +98,7 @@ const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, isOpen }) => {
         <form onSubmit={createOrdenOnSubmit}>
           <ModalHeader>Crear Orden de Servicio</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody overflow="auto">
             <OrdenForm
               empresaIdValue={empresaId}
               empresaIdHandler={empresaIdHandler}
