@@ -24,6 +24,7 @@ interface OrdenAddProps {
 
 const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, isOpen }) => {
   const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const [empresaId, setEmpresaId] = useState<number>(0);
   const [numOrden, setNumOrden] = useState('');
   const [items, setItems] = useState<ItemCreate[]>([]);
@@ -70,13 +71,20 @@ const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, isOpen }) => {
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-    dispatch(
-      createOrden({
-        empresaId,
-        numOrden,
-        items,
-      })
-    );
+    try {
+      setIsLoading(true);
+      await dispatch(
+        createOrden({
+          empresaId,
+          numOrden,
+          items,
+        })
+      ).unwrap();
+      onClose();
+    } catch {}
+    finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -107,7 +115,7 @@ const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, isOpen }) => {
             <Button type="button" colorScheme="blackAlpha" onClick={onClose}>
               Cerrar
             </Button>
-            <Button type="submit" marginLeft="3" colorScheme="blue">
+            <Button type="submit" marginLeft="3" isLoading={isLoading} colorScheme="blue">
               Guardar
             </Button>
           </ModalFooter>
