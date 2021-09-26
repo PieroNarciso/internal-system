@@ -5,6 +5,7 @@ import Layout from '@/layouts/Layout';
 import Home from '@/views/Home';
 import Login from '@/views/Login';
 import OrdenDetail from '@/views/OrdenDetail';
+import BusinessList from './views/BusinessList';
 
 const App: React.FC = () => {
   return (
@@ -13,6 +14,9 @@ const App: React.FC = () => {
         <Switch>
           <Route path="/" exact>
             <Redirect to="/ordenes" />
+          </Route>
+          <Route path="/businesses">
+            <BusinessList />
           </Route>
           <Route path="/ordenes" exact>
             <Home/ >

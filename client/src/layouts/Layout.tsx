@@ -18,9 +18,14 @@ import {
 } from '@chakra-ui/react';
 import { MdMenu } from 'react-icons/md';
 import { Link as RouterLink } from 'react-router-dom';
+import MainDrawer from '@/components/UI/Drawer';
 
 const Layout: React.FC = ({ children }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: drawerIsOpen,
+    onOpen: drawerOnOpen,
+    onClose: drawerOnClose,
+  } = useDisclosure();
 
   return (
     <Fragment>
@@ -30,7 +35,7 @@ const Layout: React.FC = ({ children }) => {
             <IconButton
               aria-label="Drawer button"
               icon={<MdMenu />}
-              onClick={onOpen}
+              onClick={drawerOnOpen}
             />
             <Heading size="md" marginLeft="2">
               <RouterLink to="/">Texaf App</RouterLink>
@@ -39,24 +44,14 @@ const Layout: React.FC = ({ children }) => {
         </Box>
         <Spacer />
         <Box>
-          <Link
-            as={RouterLink}
-            to="/login"
-          >
-          <Button size="sm" colorScheme="gray">
-            Ingresar
-          </Button>
+          <Link as={RouterLink} to="/login">
+            <Button size="sm" colorScheme="gray">
+              Ingresar
+            </Button>
           </Link>
         </Box>
       </Flex>
-      <Drawer isOpen={isOpen} onClose={onClose} placement="left">
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerBody></DrawerBody>
-          <DrawerFooter></DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+      <MainDrawer isOpen={drawerIsOpen} onClose={drawerOnClose} />
       <Container marginY="4">{children!}</Container>
     </Fragment>
   );
