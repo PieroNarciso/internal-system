@@ -13,6 +13,7 @@ import {
   NumberInputField,
   NumberInputStepper,
   Select,
+  Spacer,
   StackProps,
   VStack,
 } from '@chakra-ui/react';
@@ -22,12 +23,15 @@ import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchBusinessEntries } from '@/store/business/business.thunks';
 import { ItemUpdate, ItemCreate } from '@/interfaces/item.interface';
 import { MdRemoveCircle } from 'react-icons/md';
+import { Estado } from '@/types';
 
 interface OrdenFormProps extends Pick<StackProps, 'spacing'> {
   empresaIdValue: number;
   empresaIdHandler: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   numOrdenValue: string;
   numOrdenHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  estado?: Estado;
+  estadoHandler?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   items: ItemCreate[] | ItemUpdate[];
   addNewItem: () => void;
   deleteItem: (index: number) => void;
@@ -82,7 +86,19 @@ const OrdenForm: React.FC<OrdenFormProps> = ({ spacing, ...props }) => {
           />
         </FormControl>
       </VStack>
-      <Flex justifyContent="end" width="full" marginTop="4">
+      <Flex justifyContent="space-between" width="full" marginTop="4">
+        {props.estado && props.estadoHandler ? (
+          <Select value={props.estado} onChange={props.estadoHandler} marginRight="5" required>
+            <option value="" hidden>
+              Estado
+            </option>
+            <option>{Estado.ACTIVO.toUpperCase()}</option>
+            <option>{Estado.COMPLETADO.toUpperCase()}</option>
+            <option>{Estado.INACTIVO.toUpperCase()}</option>
+          </Select>
+        ) : (
+          <Spacer />
+        )}
         <Button colorScheme="green" onClick={props.addNewItem}>
           Agregar Item
         </Button>
