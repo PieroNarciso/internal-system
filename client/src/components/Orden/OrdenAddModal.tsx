@@ -81,6 +81,9 @@ const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, isOpen }) => {
         })
       ).unwrap();
       onClose();
+      setEmpresaId(0);
+      setNumOrden('');
+      setItems([]);
     } catch {}
     finally {
       setIsLoading(false);

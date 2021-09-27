@@ -49,7 +49,7 @@ class OrdenService {
       if (!id) throw new Error('Missing Id');
       const orden = await getRepository(OrdenServicio).findOne(
         { id },
-        { relations: ['historias', 'items'] }
+        { relations: ['historias', 'items', 'empresa'] }
       );
       if (!orden) throw new Error('Not Found');
       return orden;
