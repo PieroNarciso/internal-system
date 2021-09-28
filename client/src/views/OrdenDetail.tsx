@@ -1,3 +1,4 @@
+import OrdenUpdateModal from '@/components/Orden/OrdenUpdateModal';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { Item } from '@/interfaces/item.interface';
 import { fetchOrdenById } from '@/store/orden/orden.thunks';
@@ -14,6 +15,7 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from '@chakra-ui/react';
 import React, { Fragment, useEffect } from 'react';
 import { MdAddCircle, MdEdit } from 'react-icons/md';
@@ -21,6 +23,11 @@ import { useParams } from 'react-router-dom';
 
 const OrdenDetail: React.FC = () => {
   const dispatch = useAppDispatch();
+  const {
+    isOpen: modalIsOpen,
+    onClose: modalOnClose,
+    onOpen: modalOnOpen,
+  } = useDisclosure();
   const currentOrden = useAppSelector((state) => state.orden.currentOrden);
   const { ordenId } = useParams<{ ordenId: string }>();
   useEffect(() => {
@@ -56,9 +63,20 @@ const OrdenDetail: React.FC = () => {
 
   return (
     <Fragment>
+      {modalIsOpen && (
+        <OrdenUpdateModal
+          isOpen={modalIsOpen}
+          onClose={modalOnClose}
+          orden={JSON.parse(JSON.stringify(currentOrden))}
+        />
+      )}
       <Stack spacing="4">
         <Flex justifyContent="end" alignItems="center">
-          <Button colorScheme="gray" rightIcon={<MdEdit />}>
+          <Button
+            colorScheme="gray"
+            rightIcon={<MdEdit />}
+            onClick={modalOnOpen}
+          >
             Editar
           </Button>
           <Button colorScheme="blue" marginLeft={3} rightIcon={<MdAddCircle />}>

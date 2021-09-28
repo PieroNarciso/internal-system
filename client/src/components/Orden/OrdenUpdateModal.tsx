@@ -1,112 +1,103 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import { useAppDispatch } from '@/hooks';
-import { ItemCreateWithLocalId } from '@/interfaces/item.interface';
-import { createOrden } from '@/store/orden/orden.thunks';
-import { fetchBusinessEntries } from '@/store/business/business.thunks';
 import {
-  Button,
   Modal,
-  ModalBody,
+  ModalOverlay,
+  ModalHeader,
   ModalCloseButton,
+  ModalBody,
   ModalContent,
   ModalFooter,
-  ModalHeader,
-  ModalOverlay,
+  Button,
 } from '@chakra-ui/react';
 
 import OrdenForm from '@/components/Orden/OrdenForm';
+import { OrdenDetail } from '@/interfaces/orden.interface';
+import {
+  ItemCreateWithLocalId,
+  ItemUpdate,
+  Item,
+} from '@/interfaces/item.interface';
 import { nanoid } from '@reduxjs/toolkit';
+import { Estado } from '@/types';
+import { useAppDispatch } from '@/hooks';
 
-interface OrdenAddProps {
+interface OrdenUpdateModalProps {
   isOpen: boolean;
   onClose: () => void;
+  orden: OrdenDetail;
 }
 
-const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, isOpen }) => {
+const OrdenUpdateModal: React.FC<OrdenUpdateModalProps> = ({
+  isOpen,
+  onClose,
+  orden,
+}) => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const [empresaId, setEmpresaId] = useState<number>(0);
-  const [numOrden, setNumOrden] = useState('');
-  const [items, setItems] = useState<ItemCreateWithLocalId[]>([]);
+  const [empresaId, setEmpresaId] = useState(orden.empresa.id);
+  const [numOrden, setNumOrden] = useState(orden.numOrden);
+  const [items, setItems] = useState<
+    (Item | ItemUpdate | ItemCreateWithLocalId)[]
+  >([...orden.items]);
+  const [estado, setEstado] = useState(orden.estado);
 
   const empresaIdHandler = (event: React.ChangeEvent<HTMLSelectElement>) =>
     setEmpresaId(parseInt(event.target.value));
   const numOrdenHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
     setNumOrden(event.target.value);
-
+  const estadoHandler = (event: React.ChangeEvent<HTMLSelectElement>) =>
+    setEstado(event.target.value as Estado);
   const addNewItem = () => {
-    setItems((prevState) => {
-      return [...prevState, { id: nanoid(), nombre: '', totalDespachar: 0 }];
+    setItems((prevItems) => {
+      return [...prevItems, { id: nanoid(), nombre: '', totalDespachar: 0 }];
     });
   };
-  const deleteItem = (id: number | string) => {
-    setItems((prevState) => {
-      return prevState.filter((item) => item.id !== id);
+  const deleteItem = (id: string | number) => {
+    setItems((prevItems) => {
+      const newState = [...prevItems];
+      return newState.filter((item) => item.id !== id);
     });
   };
   const changeNameValueInItem = (
     id: string | number,
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setItems((prevState) => {
-      const newState = [...prevState];
-      newState.forEach((item) => {
-        if (item.id === id) {
-          item.nombre = event.target.value;
-        }
-      });
+    setItems((prevItems) => {
+      const newState = [...prevItems];
+      const item = newState.find((item) => item.id === id);
+      if (item) item.nombre = event.target.value;
       return newState;
     });
   };
   const changeDespacharValueInItem = (
-    id: number | string,
+    id: string | number,
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setItems((prevState) => {
-      const newState = [...prevState];
-      newState.forEach((item) => {
-        if (item.id === id) {
-          item.totalDespachar =
-            parseFloat(event.target.value) || item.totalDespachar;
-        }
-      });
+    setItems((prevItems) => {
+      const newState = [...prevItems];
+      const item = newState.find((item) => item.id === id);
+      if (item)
+        item.totalDespachar =
+          parseFloat(event.target.value) || item.totalDespachar;
       return newState;
     });
   };
 
-  const createOrdenOnSubmit = async (
+  const updateOrdenOnSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-    try {
-      setIsLoading(true);
-      await dispatch(
-        createOrden({
-          empresaId,
-          numOrden,
-          items,
-        })
-      ).unwrap();
-      onClose();
-      setEmpresaId(0);
-      setNumOrden('');
-      setItems([]);
-    } catch {
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    setIsLoading(false);
+    onClose();
   };
-
-  useEffect(() => {
-    dispatch(fetchBusinessEntries());
-  }, []);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <form onSubmit={createOrdenOnSubmit}>
+        <form onSubmit={updateOrdenOnSubmit}>
           <ModalHeader>Crear Orden de Servicio</ModalHeader>
           <ModalCloseButton />
           <ModalBody overflow="auto">
@@ -118,6 +109,8 @@ const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, isOpen }) => {
               items={items}
               addNewItem={addNewItem}
               deleteItem={deleteItem}
+              estado={estado}
+              estadoHandler={estadoHandler}
               changeNameValueInItem={changeNameValueInItem}
               changeDespacharValueInItem={changeDespacharValueInItem}
             />
@@ -141,4 +134,4 @@ const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, isOpen }) => {
   );
 };
 
-export default OrdenAddModal;
+export default OrdenUpdateModal;

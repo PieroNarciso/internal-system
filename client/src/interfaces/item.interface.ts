@@ -7,9 +7,7 @@ export interface ItemLocalId {
   id: string;
 }
 
-export interface ItemCreate extends Omit<ItemBase, 'nombre'> {
-  name: string;
-}
+export interface ItemCreate extends ItemBase {}
 
 export interface ItemCreateWithLocalId extends ItemCreate, ItemLocalId {}
 

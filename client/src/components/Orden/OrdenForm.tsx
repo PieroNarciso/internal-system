@@ -21,7 +21,11 @@ import React, { Fragment, useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchBusinessEntries } from '@/store/business/business.thunks';
-import { ItemCreateWithLocalId, ItemUpdate } from '@/interfaces/item.interface';
+import {
+  ItemCreateWithLocalId,
+  ItemUpdate,
+  Item,
+} from '@/interfaces/item.interface';
 import { MdRemoveCircle } from 'react-icons/md';
 import { Estado } from '@/types';
 import FormInput from '../Form/FormInput';
@@ -33,7 +37,7 @@ interface OrdenFormProps extends Pick<StackProps, 'spacing'> {
   numOrdenHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
   estado?: Estado;
   estadoHandler?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  items: ItemCreateWithLocalId[] | ItemUpdate[];
+  items: (Item | ItemCreateWithLocalId | ItemUpdate)[];
   addNewItem: () => void;
   deleteItem: (id: number | string) => void;
   changeNameValueInItem: (
@@ -95,9 +99,9 @@ const OrdenForm: React.FC<OrdenFormProps> = ({ spacing, ...props }) => {
             <option value="" hidden>
               Estado
             </option>
-            <option>{Estado.ACTIVO.toUpperCase()}</option>
-            <option>{Estado.COMPLETADO.toUpperCase()}</option>
-            <option>{Estado.INACTIVO.toUpperCase()}</option>
+            <option value={Estado.ACTIVO}>{Estado.ACTIVO.toUpperCase()}</option>
+            <option value={Estado.COMPLETADO}>{Estado.COMPLETADO.toUpperCase()}</option>
+            <option value={Estado.INACTIVO}>{Estado.INACTIVO.toUpperCase()}</option>
           </Select>
         ) : (
           <Spacer />
@@ -123,7 +127,7 @@ const OrdenForm: React.FC<OrdenFormProps> = ({ spacing, ...props }) => {
             <Fragment key={item.id}>
               <GridItem colSpan={7}>
                 <Input
-                  value={item.name}
+                  value={item.nombre}
                   onChange={(event) =>
                     props.changeNameValueInItem(item.id, event)
                   }
@@ -131,19 +135,13 @@ const OrdenForm: React.FC<OrdenFormProps> = ({ spacing, ...props }) => {
                 />
               </GridItem>
               <GridItem colSpan={4}>
-                <NumberInput precision={2}>
-                  <NumberInputField
-                    value={item.totalDespachar}
-                    onChange={(event) =>
-                      props.changeDespacharValueInItem(item.id, event)
-                    }
-                    type="number"
-                  />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+                <FormInput
+                  value={item.totalDespachar}
+                  onChange={(event) =>
+                    props.changeDespacharValueInItem(item.id, event)
+                  }
+                  type="number"
+                />
               </GridItem>
               <GridItem
                 colSpan={1}
