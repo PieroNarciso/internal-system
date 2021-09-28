@@ -21,9 +21,10 @@ import React, { Fragment, useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchBusinessEntries } from '@/store/business/business.thunks';
-import { ItemUpdate, ItemCreate } from '@/interfaces/item.interface';
+import { ItemCreateWithLocalId, ItemUpdate } from '@/interfaces/item.interface';
 import { MdRemoveCircle } from 'react-icons/md';
 import { Estado } from '@/types';
+import FormInput from '../Form/FormInput';
 
 interface OrdenFormProps extends Pick<StackProps, 'spacing'> {
   empresaIdValue: number;
@@ -32,15 +33,15 @@ interface OrdenFormProps extends Pick<StackProps, 'spacing'> {
   numOrdenHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
   estado?: Estado;
   estadoHandler?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  items: ItemCreate[] | ItemUpdate[];
+  items: ItemCreateWithLocalId[] | ItemUpdate[];
   addNewItem: () => void;
-  deleteItem: (index: number) => void;
+  deleteItem: (id: number | string) => void;
   changeNameValueInItem: (
-    index: number,
+    id: number | string,
     event: React.ChangeEvent<HTMLInputElement>
   ) => void;
   changeDespacharValueInItem: (
-    index: number,
+    id: number | string,
     event: React.ChangeEvent<HTMLInputElement>
   ) => void;
 }
@@ -75,20 +76,22 @@ const OrdenForm: React.FC<OrdenFormProps> = ({ spacing, ...props }) => {
             ))}
           </Select>
         </FormControl>
-        <FormControl isRequired>
-          <FormLabel>Número de orden</FormLabel>
-          <Input
-            placeholder="Número de orden"
-            type="text"
-            value={props.numOrdenValue}
-            onChange={props.numOrdenHandler}
-            required
-          />
-        </FormControl>
+        <FormInput
+          required
+          label="Número de orden"
+          placeholder="Número de orden"
+          value={props.numOrdenValue}
+          onChange={props.numOrdenHandler}
+        />
       </VStack>
       <Flex justifyContent="space-between" width="full" marginTop="4">
         {props.estado && props.estadoHandler ? (
-          <Select value={props.estado} onChange={props.estadoHandler} marginRight="5" required>
+          <Select
+            value={props.estado}
+            onChange={props.estadoHandler}
+            marginRight="5"
+            required
+          >
             <option value="" hidden>
               Estado
             </option>
@@ -116,13 +119,13 @@ const OrdenForm: React.FC<OrdenFormProps> = ({ spacing, ...props }) => {
           <GridItem colSpan={4}>
             <FormLabel>Peso</FormLabel>
           </GridItem>
-          {props.items.map((item, index) => (
-            <Fragment key={index}>
+          {props.items.map((item) => (
+            <Fragment key={item.id}>
               <GridItem colSpan={7}>
                 <Input
                   value={item.name}
                   onChange={(event) =>
-                    props.changeNameValueInItem(index, event)
+                    props.changeNameValueInItem(item.id, event)
                   }
                   type="text"
                 />
@@ -132,7 +135,7 @@ const OrdenForm: React.FC<OrdenFormProps> = ({ spacing, ...props }) => {
                   <NumberInputField
                     value={item.totalDespachar}
                     onChange={(event) =>
-                      props.changeDespacharValueInItem(index, event)
+                      props.changeDespacharValueInItem(item.id, event)
                     }
                     type="number"
                   />
@@ -151,7 +154,7 @@ const OrdenForm: React.FC<OrdenFormProps> = ({ spacing, ...props }) => {
                 <IconButton
                   type="button"
                   colorScheme="blackAlpha"
-                  onClick={() => props.deleteItem(index)}
+                  onClick={() => props.deleteItem(item.id)}
                   size="sm"
                   aria-label="Remove item"
                   icon={<MdRemoveCircle />}

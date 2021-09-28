@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useAppDispatch } from '@/hooks';
-import { ItemCreate } from '@/interfaces/item.interface';
+import { ItemCreateWithLocalId } from '@/interfaces/item.interface';
 import { createOrden } from '@/store/orden/orden.thunks';
 import { fetchBusinessEntries } from '@/store/business/business.thunks';
 import {
@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 
 import OrdenForm from '@/components/Orden/OrdenForm';
+import { nanoid } from '@reduxjs/toolkit';
 
 interface OrdenAddProps {
   isOpen: boolean;
@@ -27,7 +28,7 @@ const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, isOpen }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [empresaId, setEmpresaId] = useState<number>(0);
   const [numOrden, setNumOrden] = useState('');
-  const [items, setItems] = useState<ItemCreate[]>([]);
+  const [items, setItems] = useState<ItemCreateWithLocalId[]>([]);
 
   const empresaIdHandler = (event: React.ChangeEvent<HTMLSelectElement>) =>
     setEmpresaId(parseInt(event.target.value));
@@ -36,33 +37,39 @@ const OrdenAddModal: React.FC<OrdenAddProps> = ({ onClose, isOpen }) => {
 
   const addNewItem = () => {
     setItems((prevState) => {
-      return [...prevState, { name: '', totalDespachar: 0 }];
+      return [...prevState, { id: nanoid(), name: '', totalDespachar: 0 }];
     });
   };
-  const deleteItem = (index: number) => {
+  const deleteItem = (id: number | string) => {
     setItems((prevState) => {
-      const newState = [...prevState];
-      newState.splice(index, 1);
-      return newState;
+      return prevState.filter(item => item.id !== id);;
     });
   };
   const changeNameValueInItem = (
-    index: number,
+    id: string | number,
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setItems((prevState) => {
       const newState = [...prevState];
-      newState[index].name = event.target.value;
+      newState.forEach(item => {
+        if (item.id === id) {
+          item.name = event.target.value;
+        }
+      });
       return newState;
     });
   };
   const changeDespacharValueInItem = (
-    index: number,
+    id: number | string,
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setItems((prevState) => {
       const newState = [...prevState];
-      newState[index].totalDespachar = parseFloat(event.target.value);
+      newState.forEach(item => {
+        if (item.id === id) {
+          item.totalDespachar = parseFloat(event.target.value);
+        }
+      });
       return newState;
     });
   };
