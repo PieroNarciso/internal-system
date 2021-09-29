@@ -26,5 +26,6 @@ export interface OrdenDetail extends OrdenBase {
 }
 
 export interface OrdenUpdate extends Partial<OrdenCreate> {
+  id: OrdenBase['id'];
   estado?: Estado;
 }

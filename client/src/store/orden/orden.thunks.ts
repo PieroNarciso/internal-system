@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { api } from '@/api';
-import { Orden, OrdenCreate, OrdenDetail } from '@/interfaces/orden.interface';
+import { Orden, OrdenCreate, OrdenDetail, OrdenUpdate } from '@/interfaces/orden.interface';
 import { ItemCreate, Item } from '@/interfaces/item.interface';
 import { HistoryCreate } from '@/interfaces/history.interface';
 
@@ -23,6 +23,14 @@ export const createOrden = createAsyncThunk(
   async (payload: OrdenCreate) => {
     const response = await api.post<Orden>('/ordenes', payload);
     return response.data;
+  }
+);
+
+export const updateOrden = createAsyncThunk(
+  'ordenes/update',
+  async (payload: OrdenUpdate) => {
+    await api.post<Orden>(`/ordenes/${payload.id}`);
+    return payload;
   }
 );
 

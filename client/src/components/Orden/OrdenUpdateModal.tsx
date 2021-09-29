@@ -21,6 +21,7 @@ import {
 import { nanoid } from '@reduxjs/toolkit';
 import { Estado } from '@/types';
 import { useAppDispatch } from '@/hooks';
+import { updateOrden } from '@/store/orden/orden.thunks';
 
 interface OrdenUpdateModalProps {
   isOpen: boolean;
@@ -89,8 +90,19 @@ const OrdenUpdateModal: React.FC<OrdenUpdateModalProps> = ({
   ) => {
     event.preventDefault();
     setIsLoading(true);
-    setIsLoading(false);
-    onClose();
+    try {
+      dispatch(updateOrden(
+        {
+          id: orden.id,
+          numOrden,
+        }
+      ));
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+      onClose();
+    }
   };
 
   return (

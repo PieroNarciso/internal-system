@@ -1,6 +1,6 @@
 import { Orden, OrdenDetail } from '@/interfaces/orden.interface';
 import { createSlice } from '@reduxjs/toolkit';
-import { createOrden, fetchOrdenById, fetchOrdenes } from './orden.thunks';
+import { createOrden, fetchOrdenById, fetchOrdenes, updateOrden } from './orden.thunks';
 
 interface OrdenState {
   ordenes: Orden[];
@@ -25,6 +25,9 @@ const ordenSlice = createSlice({
       })
       .addCase(fetchOrdenById.fulfilled, (state, action) => {
         state.currentOrden = action.payload;
+      })
+      .addCase(updateOrden.fulfilled, (state, action) => {
+        state.currentOrden = action.payload as OrdenDetail;
       });
   },
 });
