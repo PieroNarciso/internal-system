@@ -5,13 +5,13 @@ import { Item } from '@/models/Item';
 class ItemService {
   public async create(payload: {
     ordenId: number;
-    name: string;
+    nombre: string;
     totalDespachar: number;
   }): Promise<Item> {
     try {
       const item = getRepository(Item).create({
         orden: { id: payload.ordenId },
-        nombre: payload.name,
+        nombre: payload.nombre,
         totalDespachar: payload.totalDespachar,
       });
       await item.save();
@@ -24,7 +24,7 @@ class ItemService {
   public async bulkCreate(
     payload: {
       ordenId: number;
-      name: string;
+      nombre: string;
       totalDespachar: number;
     }[]
   ): Promise<Item[]> {

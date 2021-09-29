@@ -79,7 +79,7 @@ export const addItemToOrdenById = async (
   try {
     const item = await ItemService.create({
       ordenId: parseInt(req.params.ordenId),
-      name: req.body.name,
+      nombre: req.body.nombre,
       totalDespachar: req.body.totalDespachar,
     });
     return res.status(201).send(item);

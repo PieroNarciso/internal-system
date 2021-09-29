@@ -9,7 +9,7 @@ class OrdenService {
   public async create(payload: {
     empresaId: number;
     numOrden: string;
-    items?: { name: string; totalDespachar: number }[];
+    items?: { nombre: string; totalDespachar: number }[];
   }): Promise<OrdenServicio> {
     try {
       if (!payload.empresaId || !payload.numOrden)
@@ -64,7 +64,7 @@ class OrdenService {
       empresaId?: number;
       estado?: Estado;
       numOrden?: string;
-      items?: { id: number; name: string; totalDespachar: number }[];
+      items?: { id: number; nombre: string; totalDespachar: number }[];
     }
   ): Promise<boolean> {
     try {
@@ -81,7 +81,7 @@ class OrdenService {
           try {
             if (!item.id) throw new Error('Missing item id');
             await getRepository(Item).update(item.id, {
-              nombre: item.name,
+              nombre: item.nombre,
               totalDespachar: item.totalDespachar,
             });
           } catch (err) {

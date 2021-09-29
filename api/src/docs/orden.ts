@@ -91,7 +91,7 @@ export const ordenComponents: OpenAPIV3.ComponentsObject['schemas'] = {
   ItemCreateBody: {
     type: 'object',
     properties: {
-      name: {
+      nombre: {
         type: 'string',
         description: 'Item name description',
       },
@@ -103,7 +103,7 @@ export const ordenComponents: OpenAPIV3.ComponentsObject['schemas'] = {
   ItemEditBody: {
     type: 'object',
     properties: {
-      name: {
+      nombre: {
         type: 'string',
       },
       totalDespachar: {
